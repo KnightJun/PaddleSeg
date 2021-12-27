@@ -209,7 +209,8 @@ def inference(model,
               transforms=None,
               is_slide=False,
               stride=None,
-              crop_size=None):
+              crop_size=None,
+              single_class=False):
     """
     Inference for image.
 
@@ -228,7 +229,10 @@ def inference(model,
     """
     if hasattr(model, 'data_format') and model.data_format == 'NHWC':
         im = im.transpose((0, 2, 3, 1))
-    if not is_slide:
+    if single_class:
+        logits = model(im)
+        logit = logits[0]
+    elif not is_slide:
         logits = model(im)
         if not isinstance(logits, collections.abc.Sequence):
             raise TypeError(
@@ -241,8 +245,11 @@ def inference(model,
         logit = logit.transpose((0, 3, 1, 2))
     if ori_shape is not None:
         logit = reverse_transform(logit, ori_shape, transforms, mode='bilinear')
-        pred = paddle.argmax(logit, axis=1, keepdim=True, dtype='int32')
-        return pred, logit
+        if single_class:
+            return logit, logit
+        else:
+            pred = paddle.argmax(logit, axis=1, keepdim=True, dtype='int32')
+            return pred, logit
     else:
         return logit
 

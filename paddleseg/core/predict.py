@@ -49,7 +49,8 @@ def predict(model,
             is_slide=False,
             stride=None,
             crop_size=None,
-            custom_color=None):
+            custom_color=None,
+            single_class=False):
     """
     predict and visualize the image_list.
 
@@ -115,9 +116,10 @@ def predict(model,
                     transforms=transforms.transforms,
                     is_slide=is_slide,
                     stride=stride,
-                    crop_size=crop_size)
+                    crop_size=crop_size, single_class=single_class)
             pred = paddle.squeeze(pred)
-            pred = pred.numpy().astype('uint8')
+            if not single_class:
+                pred = pred.numpy().astype('uint8')
 
             # get the saved name
             if image_dir is not None:
@@ -127,21 +129,32 @@ def predict(model,
             if im_file[0] == '/' or im_file[0] == '\\':
                 im_file = im_file[1:]
 
-            # save added image
-            added_image = utils.visualize.visualize(
-                im_path, pred, color_map, weight=0.6)
-            added_image_path = os.path.join(added_saved_dir, im_file)
-            mkdir(added_image_path)
-            cv2.imwrite(added_image_path, added_image)
+            if not single_class:
+                # save added image
+                added_image = utils.visualize.visualize(
+                    im_path, pred, color_map, weight=0.6)
+                added_image_path = os.path.join(added_saved_dir, im_file)
+                mkdir(added_image_path)
+                cv2.imwrite(added_image_path, added_image)
 
-            # save pseudo color prediction
-            pred_mask = utils.visualize.get_pseudo_color_map(pred, color_map)
-            pred_saved_path = os.path.join(
-                pred_saved_dir,
-                os.path.splitext(im_file)[0] + ".png")
-            mkdir(pred_saved_path)
-            pred_mask.save(pred_saved_path)
-
+                # save pseudo color prediction
+                pred_mask = utils.visualize.get_pseudo_color_map(pred, color_map)
+                pred_saved_path = os.path.join(
+                    pred_saved_dir,
+                    os.path.splitext(im_file)[0] + ".png")
+                mkdir(pred_saved_path)
+                pred_mask.save(pred_saved_path)
+            else:
+                added_image, pred_mask = utils.visualize.visualize_single_class(
+                    cv2.imread(im_path, cv2.IMREAD_COLOR), pred)
+                added_image_path = os.path.join(added_saved_dir, os.path.splitext(im_file)[0] + ".png")
+                mkdir(added_image_path)
+                cv2.imwrite(added_image_path, added_image)
+                pred_saved_path = os.path.join(
+                    pred_saved_dir,
+                    os.path.splitext(im_file)[0] + ".png")
+                mkdir(pred_saved_path)
+                cv2.imwrite(pred_saved_path, pred_mask)
             # pred_im = utils.visualize(im_path, pred, weight=0.0)
             # pred_saved_path = os.path.join(pred_saved_dir, im_file)
             # mkdir(pred_saved_path)
