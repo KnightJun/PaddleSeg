@@ -74,14 +74,23 @@ class Cityscapes(Dataset):
             raise ValueError(
                 "The dataset is not Found or the folder structure is nonconfoumance."
             )
-
-        label_files = sorted(
-            glob.glob(
-                os.path.join(label_dir, mode, '*',
-                             '*_gtFine_labelTrainIds.png')))
-        img_files = sorted(
-            glob.glob(os.path.join(img_dir, mode, '*', '*_leftImg8bit.png')))
-
+        list_files = os.path.join(dataset_root, mode + ".list")
+        label_files = []
+        img_files = []
+        if os.path.isfile(list_files):
+            listLines = open(list_files, 'r').read().splitlines()
+            for line in listLines:
+                line_sp = line.split(' ')
+                img_files.append( os.path.join(dataset_root, line_sp[0]) )
+                label_files.append( os.path.join(dataset_root, line_sp[1]) )
+        else:
+            label_files = sorted(
+                glob.glob(
+                    os.path.join(label_dir, mode, '*',
+                                '*_gtFine_labelTrainIds.png')))
+            img_files = sorted(
+                glob.glob(os.path.join(img_dir, mode, '*', '*_leftImg8bit.png')))
+        
         self.file_list = [[
             img_path, label_path
         ] for img_path, label_path in zip(img_files, label_files)]
