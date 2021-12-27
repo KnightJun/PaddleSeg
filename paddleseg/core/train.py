@@ -16,6 +16,7 @@ import os
 import time
 from collections import deque
 import shutil
+import numpy
 
 import paddle
 import paddle.nn.functional as F
@@ -165,7 +166,7 @@ def train(model,
                     break
             reader_cost_averager.record(time.time() - batch_start)
             images = data[0]
-            labels = data[1].astype('int64')
+            labels = data[1].astype('float32') #.astype('int64')
             edges = None
             if len(data) == 3:
                 edges = data[2].astype('int64')
