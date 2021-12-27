@@ -446,9 +446,10 @@ class Normalize:
         ValueError: When mean/std is not list or any value in std is 0.
     """
 
-    def __init__(self, mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)):
+    def __init__(self, mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5), for_label=False):
         self.mean = mean
         self.std = std
+        self.for_label = for_label
         if not (isinstance(self.mean, (list, tuple))
                 and isinstance(self.std, (list, tuple))):
             raise ValueError(
@@ -470,6 +471,9 @@ class Normalize:
 
         mean = np.array(self.mean)[np.newaxis, np.newaxis, :]
         std = np.array(self.std)[np.newaxis, np.newaxis, :]
+        if self.for_label and not (label is None):
+            label = label / std
+            return (im, label)
         im = functional.normalize(im, mean, std)
 
         if label is None:

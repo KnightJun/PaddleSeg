@@ -1,0 +1,1 @@
+python predict.py --config configs/segformer/segformer_b2_normal_seg.yml --image_path test.jpg --save_dir output/result

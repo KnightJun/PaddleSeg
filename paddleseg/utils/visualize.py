@@ -19,6 +19,14 @@ import numpy as np
 from PIL import Image as PILImage
 
 
+def visualize_single_class(image, pred : np.array):
+    mask = np.clip(pred, 0, 1)
+    mask *= 255
+    mask = mask.astype('uint8')
+    b, g, r = cv2.split(image)
+    reImage = cv2.merge((b, g, r, mask))
+    return reImage, mask
+
 def visualize(image, result, color_map, save_dir=None, weight=0.6):
     """
     Convert predict result to color image, and save added image.
