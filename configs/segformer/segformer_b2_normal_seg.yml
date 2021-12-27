@@ -57,7 +57,7 @@ lr_scheduler:
 
 loss:
   types:
-    - type: CrossEntropyLoss
+    - type: L1Loss
   coef: [1]
 
 test_config:
