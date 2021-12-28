@@ -1,10 +1,10 @@
-batch_size: 1
-iters: 160000
+batch_size: 10
+iters: 1600000
 
 train_dataset:
   type: Dataset
-  dataset_root: data/mini_supervisely
-  train_path: data/mini_supervisely/train.txt
+  dataset_root: data/BingImages30787_480
+  train_path: data/BingImages30787_480/train.txt
   num_classes: 1
   transforms:
     - type: RandomHorizontalFlip
@@ -17,18 +17,23 @@ train_dataset:
       std: [1]
       for_label: True
     - type: Normalize
+      mean: [0,0,0]
+      std: [1,1,1]
   mode: train
 
 val_dataset:
   type: Dataset
-  dataset_root: data/mini_supervisely
-  val_path: data/mini_supervisely/val.txt
+  dataset_root: data/BingImages30787_480
+  val_path: data/BingImages30787_480/val.txt
   num_classes: 1
   transforms:
     - type: Normalize
       mean: [0]
       std: [1]
       for_label: True
+    - type: Normalize
+      mean: [0,0,0]
+      std: [1,1,1]
   mode: val
 
 export:
@@ -38,6 +43,8 @@ export:
       std: [1]
       for_label: True
     - type: Normalize
+      mean: [0,0,0]
+      std: [1,1,1]
 
 model:
   type: SegFormer_B2
@@ -57,7 +64,7 @@ lr_scheduler:
 
 loss:
   types:
-    - type: L1Loss
+    - type: BCELoss
   coef: [1]
 
 test_config:

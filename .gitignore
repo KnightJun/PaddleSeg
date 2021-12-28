@@ -114,3 +114,4 @@ package-lock.json
 test_tipc/web/models/
 
 /data
+/output

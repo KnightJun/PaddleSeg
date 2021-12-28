@@ -36,7 +36,8 @@ def evaluate(model,
              crop_size=None,
              num_workers=0,
              print_detail=True,
-             auc_roc=False):
+             auc_roc=False,
+             single_class=False):
     """
     Launch evalution.
 
@@ -97,7 +98,10 @@ def evaluate(model,
     with paddle.no_grad():
         for iter, (im, label) in enumerate(loader):
             reader_cost_averager.record(time.time() - batch_start)
-            label = label.astype('int64')
+            if single_class:
+                label = label.astype('float32')
+            else:
+                label = label.astype('int64')
 
             ori_shape = label.shape[-2:]
             if aug_eval:
@@ -120,7 +124,8 @@ def evaluate(model,
                     transforms=eval_dataset.transforms.transforms,
                     is_slide=is_slide,
                     stride=stride,
-                    crop_size=crop_size)
+                    crop_size=crop_size,
+                    single_class=single_class)
 
             intersect_area, pred_area, label_area = metrics.calculate_area(
                 pred,

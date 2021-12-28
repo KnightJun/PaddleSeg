@@ -472,7 +472,7 @@ class Normalize:
         mean = np.array(self.mean)[np.newaxis, np.newaxis, :]
         std = np.array(self.std)[np.newaxis, np.newaxis, :]
         if self.for_label and not (label is None):
-            label = label / std
+            label = (label.astype(np.float) / 255 - mean) / std
             return (im, label)
         im = functional.normalize(im, mean, std)
 
