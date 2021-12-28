@@ -39,10 +39,6 @@ val_dataset:
 export:
   transforms:
     - type: Normalize
-      mean: [0]
-      std: [1]
-      for_label: True
-    - type: Normalize
       mean: [0,0,0]
       std: [1,1,1]
 

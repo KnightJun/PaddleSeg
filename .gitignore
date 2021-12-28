@@ -115,3 +115,5 @@ test_tipc/web/models/
 
 /data
 /output
+/testimage
+/model
