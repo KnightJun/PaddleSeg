@@ -120,6 +120,7 @@ class SegFormer(nn.Layer):
 
         logit = self.dropout(_c)
         logit = self.linear_pred(logit)
+        logit = F.sigmoid(logit)
         return [
             F.interpolate(
                 logit,
