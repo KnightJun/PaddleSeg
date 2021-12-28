@@ -92,7 +92,7 @@ def predict(model,
         for i, im_path in enumerate(img_lists[local_rank]):
             im = cv2.imread(im_path)
             ori_shape = im.shape[:2]
-            im = utils.visualize.PadAndResizeTo(im, 480)
+            im = utils.visualize.PadAndResizeTo(im, 640)
             im, _ = transforms(im)
             im = im[np.newaxis, ...]
             if max(im.shape) > 1200:
@@ -148,7 +148,8 @@ def predict(model,
                 mkdir(pred_saved_path)
                 pred_mask.save(pred_saved_path)
             else:
-                pred = utils.visualize.UnPadAndResizeTo(pred.numpy(), ori_shape[1], ori_shape[0])
+                pred = pred.numpy()
+                pred = utils.visualize.UnPadAndResizeTo(pred, ori_shape[1], ori_shape[0])
                 added_image, pred_mask = utils.visualize.visualize_single_class(
                     cv2.imread(im_path, cv2.IMREAD_COLOR), pred)
                 added_image_path = os.path.join(added_saved_dir, os.path.splitext(im_file)[0] + ".png")
