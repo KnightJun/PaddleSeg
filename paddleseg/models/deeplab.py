@@ -76,6 +76,7 @@ class DeepLabV3P(nn.Layer):
         self.align_corners = align_corners
         self.pretrained = pretrained
         self.data_format = data_format
+        self.sigmoid = paddle.nn.Sigmoid()
         self.init_weight()
 
     def forward(self, x):
@@ -85,6 +86,7 @@ class DeepLabV3P(nn.Layer):
             ori_shape = paddle.shape(x)[2:]
         else:
             ori_shape = paddle.shape(x)[1:3]
+        logit_list = [self.sigmoid(logit) for logit in logit_list]
         return [
             F.interpolate(
                 logit,
