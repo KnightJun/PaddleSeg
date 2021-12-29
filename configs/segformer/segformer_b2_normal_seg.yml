@@ -1,67 +1,8 @@
+_base_: '../_base_/BingImages30787_480.yml'
 batch_size: 10
 iters: 1600000
-
-train_dataset:
-  type: Dataset
-  dataset_root: data/BingImages30787_480
-  train_path: data/BingImages30787_480/train.txt
-  num_classes: 1
-  transforms:
-    - type: RandomHorizontalFlip
-    - type: RandomDistort
-      brightness_range: 0.4
-      contrast_range: 0.4
-      saturation_range: 0.4
-    - type: Normalize
-      mean: [0]
-      std: [1]
-      for_label: True
-    - type: Normalize
-      mean: [0,0,0]
-      std: [1,1,1]
-  mode: train
-
-val_dataset:
-  type: Dataset
-  dataset_root: data/BingImages30787_480
-  val_path: data/BingImages30787_480/val.txt
-  num_classes: 1
-  transforms:
-    - type: Normalize
-      mean: [0]
-      std: [1]
-      for_label: True
-    - type: Normalize
-      mean: [0,0,0]
-      std: [1,1,1]
-  mode: val
-
-export:
-  transforms:
-    - type: Normalize
-      mean: [0,0,0]
-      std: [1,1,1]
 
 model:
   type: SegFormer_B2
   num_classes: 1
   pretrained: https://bj.bcebos.com/paddleseg/dygraph/mix_vision_transformer_b2.tar.gz
-
-optimizer:
-  type: AdamW
-  beta1: 0.9
-  beta2: 0.999
-  weight_decay: 0.01
-
-lr_scheduler:
-  type: PolynomialDecay
-  learning_rate: 0.00006
-  power: 1
-
-loss:
-  types:
-    - type: BCELoss
-  coef: [1]
-
-test_config:
-  single_class: True
