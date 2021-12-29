@@ -72,6 +72,7 @@ class SegFormer(nn.Layer):
 
         self.linear_pred = nn.Conv2D(
             embedding_dim, self.num_classes, kernel_size=1)
+        self.sigmoid = paddle.nn.Sigmoid()
 
         self.init_weight()
 
@@ -120,7 +121,7 @@ class SegFormer(nn.Layer):
 
         logit = self.dropout(_c)
         logit = self.linear_pred(logit)
-        logit = F.sigmoid(logit)
+        logit = self.sigmoid(logit)
         return [
             F.interpolate(
                 logit,
