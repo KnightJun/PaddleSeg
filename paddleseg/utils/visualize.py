@@ -18,6 +18,34 @@ import cv2
 import numpy as np
 from PIL import Image as PILImage
 
+def reseizeToMaxSide(img, maxSide = 480):
+    scaleVal = maxSide / max(img.shape[0:2])
+    return cv2.resize(img, (round(img.shape[1] * scaleVal), round(img.shape[0] * scaleVal)))
+
+def padToSquare(image, fill=0):
+    h, w = image.shape[0:2]
+    max_wh = max([w, h])
+    wp = int((max_wh - w) / 2)
+    hp = int((max_wh - h) / 2)
+    hp2 = hp + (max_wh - (h + hp * 2))
+    wp2 = wp + (max_wh - (w + wp * 2))
+    return cv2.copyMakeBorder(image, hp, hp2, wp, wp2, cv2.BORDER_REFLECT_101)
+
+def PadAndResizeTo(img, input_size):
+    return padToSquare(reseizeToMaxSide(img, input_size))
+
+def UnPadAndResizeTo(img, w, h = None):
+    if h == None:
+        h = w
+    max_wh = max([w, h])
+    radio = img.shape[0] / max_wh 
+    tmpW, tmpH = radio * w, radio * h
+    tmpMaxWH = max([tmpW, tmpH])
+    ch = round((tmpMaxWH - tmpH) / 2)
+    cw = round((tmpMaxWH - tmpW) / 2)
+    img = img[ch : img.shape[0] - ch, cw : img.shape[0] - cw]
+    img = cv2.resize(img, (w, h))
+    return img
 
 def visualize_single_class(image, pred : np.array):
     mask = np.clip(pred, 0, 1)
