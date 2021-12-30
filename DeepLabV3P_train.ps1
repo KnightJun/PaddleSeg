@@ -1,0 +1,1 @@
+python train.py --config configs/deeplabv3p/deeplabv3p_resnet50_os8_normal_seg.yml --do_eval --use_vdl --save_interval 1000 --save_dir output

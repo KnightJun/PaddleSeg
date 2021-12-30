@@ -92,7 +92,8 @@ def predict(model,
         for i, im_path in enumerate(img_lists[local_rank]):
             im = cv2.imread(im_path)
             ori_shape = im.shape[:2]
-            im = utils.visualize.PadAndResizeTo(im, 640)
+            if single_class:
+                im = utils.visualize.PadAndResizeTo(im, 640)
             im, _ = transforms(im)
             im = im[np.newaxis, ...]
             if max(im.shape) > 1200:

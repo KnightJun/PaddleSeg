@@ -1,0 +1,1 @@
+python predict.py --config configs/deeplabv3p/deeplabv3p_resnet50_os8_normal_seg.yml --image_path testimage/test.jpg --save_dir output/result
