@@ -117,3 +117,6 @@ test_tipc/web/models/
 /output
 /testimage
 /model
+/contrib/Matting/data
+/contrib/Matting/output
+/contrib/Matting/params

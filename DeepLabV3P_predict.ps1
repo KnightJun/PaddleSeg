@@ -1,1 +1,1 @@
-python predict.py --config configs/deeplabv3p/deeplabv3p_resnet50_os8_normal_seg.yml --image_path testimage/test.jpg --save_dir output/result
+python predict.py --config configs/modnet/modnet_mobilenetv2.yml --model_path output/best_model/model.pdparams --image_path data/PPM-100/val/fg/ --save_dir ./output/results
