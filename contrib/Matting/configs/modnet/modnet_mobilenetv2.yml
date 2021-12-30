@@ -1,4 +1,4 @@
-batch_size: 16
+batch_size: 12
 iters: 100000
 
 train_dataset:
@@ -7,8 +7,12 @@ train_dataset:
   train_file: train.txt
   transforms:
     - type: LoadImages
+    - type: ResizeByShort
+      short_size: 512
     - type: RandomCrop
       crop_size: [512, 512]
+    - type: Resize
+      target_size: [512, 512]
     - type: RandomDistort
     - type: RandomBlur
     - type: RandomHorizontalFlip
