@@ -33,6 +33,24 @@ def partition_list(arr, m):
     return [arr[i:i + n] for i in range(0, len(arr), n)]
 
 
+def save_merge_pred(imgpath, alpha, path, trimap=None):
+    """
+    The value of alpha is range [0, 1], shape should be [h,w]
+    """
+    dirname = os.path.dirname(path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    if not trimap is None:
+        print("trimap:", trimap)
+        trimap = cv2.imread(trimap, 0)
+        alpha[trimap == 0] = 0
+        alpha[trimap == 255] = 255
+    img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
+    B, G, R = cv2.split(img)
+    alpha = (alpha).astype('uint8')
+    img = cv2.merge([B, G, R, alpha])
+    cv2.imwrite(os.path.splitext(path)[0] + '.png', img)
+
 def save_alpha_pred(alpha, path, trimap=None):
     """
     The value of alpha is range [0, 1], shape should be [h,w]
@@ -143,7 +161,8 @@ def predict(model,
 
             save_path = os.path.join(save_dir, im_file)
             mkdir(save_path)
-            save_alpha_pred(alpha_pred, save_path, trimap=trimap)
+            # save_alpha_pred(alpha_pred, save_path, trimap=trimap)
+            save_merge_pred(im_path, alpha_pred, save_path, trimap=trimap)
 
             postprocess_cost_averager.record(time.time() - postprocess_start)
 
