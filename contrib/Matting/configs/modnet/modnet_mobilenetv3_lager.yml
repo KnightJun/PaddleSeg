@@ -1,6 +1,9 @@
 _base_: modnet_mobilenetv2.yml
+batch_size: 36
+iters: 300000
 model:
   backbone:
     type: MobileNetV3_large_x1_0
+    pretrained: Null
     # pretrained: https://bj.bcebos.com/paddleseg/dygraph/hrnet_w18_ssld.tar.gz
 
