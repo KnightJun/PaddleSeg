@@ -4,6 +4,5 @@ iters: 300000
 model:
   backbone:
     type: MobileNetV3_large_x1_0
-    pretrained: Null
-    # pretrained: https://bj.bcebos.com/paddleseg/dygraph/hrnet_w18_ssld.tar.gz
+    pretrained: https://paddledet.bj.bcebos.com/models/pretrained/MobileNetV3_large_x1_pretrained.pdparams
 
