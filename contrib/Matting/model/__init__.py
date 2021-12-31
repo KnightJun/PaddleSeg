@@ -15,6 +15,7 @@
 from .vgg import *
 from .resnet_vd import *
 from .mobilenet_v2 import *
+from .mobilenetv3 import *
 from .hrnet import *
 from .dim import DIM
 from .loss import MRSD

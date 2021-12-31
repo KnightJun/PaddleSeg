@@ -1,0 +1,6 @@
+_base_: modnet_mobilenetv2.yml
+model:
+  backbone:
+    type: MobileNetV3_large_x1_0
+    # pretrained: https://bj.bcebos.com/paddleseg/dygraph/hrnet_w18_ssld.tar.gz
+

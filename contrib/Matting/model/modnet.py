@@ -54,7 +54,12 @@ class MODNet(nn.Layer):
         If evaluation, return the final alpha prediction.
         """
         x = inputs['img']
+        # print("input shape:", x.shape)
+        # print("feat_channels:", self.backbone.feat_channels)
         feat_list = self.backbone(x)
+        # for feat in feat_list:
+        #     print(feat.shape)
+        # exit()
         y = self.head(inputs=inputs, feat_list=feat_list)
 
         return y
