@@ -140,7 +140,11 @@ def predict(model,
             preprocess_start = time.time()
             trimap = trimap_lists[local_rank][
                 i] if trimap_list is not None else None
-            data = preprocess(img=im_path, transforms=transforms, trimap=trimap)
+            try:
+                data = preprocess(img=im_path, transforms=transforms, trimap=trimap)
+            except:
+                print('preprocess error on ', im_path)
+                continue
             preprocess_cost_averager.record(time.time() - preprocess_start)
 
             infer_start = time.time()
