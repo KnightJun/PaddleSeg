@@ -107,6 +107,7 @@ def train(model,
     if params_preload is not None:
         logger.info('preload params from {}'.format(params_preload))
         model.set_state_dict(paddle.load(params_preload))
+    logger.info('isquant: {}'.format(isquant))
     if isquant:
         logger.info('quant train')
         quanter = paddleslim.QAT(config=quant_config)
