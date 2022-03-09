@@ -105,7 +105,7 @@ def train(model,
         eval_begin_iters (int): The iters begin evaluation. It will evaluate at iters/2 if it is None. Defalust: None.
     """
     if params_preload is not None:
-        logger.info('preload params from {}'.format(resume_model))
+        logger.info('preload params from {}'.format(params_preload))
         model.set_state_dict(paddle.load(params_preload))
     if isquant:
         logger.info('quant train')

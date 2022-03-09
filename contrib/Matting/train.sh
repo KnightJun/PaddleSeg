@@ -6,3 +6,6 @@ python train.py --config configs/modnet/modnet_mobilenetv3_lager.yml --do_eval -
 
 # 预测
 python predict.py --config ./configs/modnet/modnet_hrnet_w18.yml  --image_path /data/ImageDataset/Images --save_dir /data/ImageDataset/mask_predict --model_path /data/ModNetOutput/best_model/model.pdparams
+
+# ai studio 量化
+python train.py --config configs/modnet/modnet_hrnet_w18.yml --do_eval --use_vdl --save_interval 1000 --save_dir ./ModnetQuant --params_preload ./src_model/model.pdparams --quant
