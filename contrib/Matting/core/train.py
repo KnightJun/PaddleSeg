@@ -20,10 +20,23 @@ import shutil
 import numpy as np
 import paddle
 import paddle.nn.functional as F
+import paddleslim
 from paddleseg.utils import TimeAverager, calculate_eta, resume, logger
 
 from core.val import evaluate
 
+quant_config = {
+    'weight_preprocess_type': None,
+    'activation_preprocess_type': None,
+    'weight_quantize_type': 'channel_wise_abs_max',
+    'activation_quantize_type': 'moving_average_abs_max',
+    'weight_bits': 8,
+    'activation_bits': 8,
+    'dtype': 'int8',
+    'window_size': 10000,
+    'moving_rate': 0.9,
+    'quantizable_layer_type': ['Conv2D', 'Linear'],
+}
 
 def visual_in_traning(log_writer, vis_dict, step):
     """
@@ -61,6 +74,8 @@ def train(model,
           iters=10000,
           batch_size=2,
           resume_model=None,
+          params_preload=None,
+          isquant=False,
           save_interval=1000,
           log_iters=10,
           log_image_iters=1000,
@@ -89,6 +104,13 @@ def train(model,
         keep_checkpoint_max (int, optional): Maximum number of checkpoints to save. Default: 5.
         eval_begin_iters (int): The iters begin evaluation. It will evaluate at iters/2 if it is None. Defalust: None.
     """
+    if params_preload is not None:
+        logger.info('preload params from {}'.format(resume_model))
+        model.set_state_dict(paddle.load(params_preload))
+    if isquant:
+        logger.info('quant train')
+        quanter = paddleslim.QAT(config=quant_config)
+        quanter.quantize(model)
     model.train()
     nranks = paddle.distributed.ParallelEnv().nranks
     local_rank = paddle.distributed.ParallelEnv().local_rank

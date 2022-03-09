@@ -92,6 +92,17 @@ def parse_args():
         default=10,
         type=int)
     parser.add_argument(
+        '--params_preload',
+        dest='params_preload',
+        help='The path of model for params_preload',
+        type=str,
+        default=None)
+    parser.add_argument(
+        '--quant',
+        dest='isquant',
+        help='quant train',
+        action='store_false')
+    parser.add_argument(
         '--use_vdl',
         dest='use_vdl',
         help='Whether to record the data to VisualDL during training',
@@ -165,6 +176,8 @@ def main(args):
         save_interval=args.save_interval,
         log_iters=args.log_iters,
         resume_model=args.resume_model,
+        params_preload=args.params_preload,
+        isquant=args.isquant,
         save_dir=args.save_dir,
         eval_begin_iters=args.eval_begin_iters)
 
