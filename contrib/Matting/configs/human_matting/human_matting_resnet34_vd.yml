@@ -1,4 +1,4 @@
-batch_size: 4
+batch_size: 50
 iters: 50000
 
 train_dataset:
@@ -7,17 +7,18 @@ train_dataset:
   train_file: train.txt
   transforms:
     - type: LoadImages
-    - type: RandomResize
-      size: [2048, 2048]
-      scale: [0.3, 1.5]
+    - type: ResizeByShort
+      short_size: 512
     - type: RandomCrop
-      crop_size: [2048, 2048]
+      crop_size: [512, 512]
+    - type: Resize
+      target_size: [512, 512]
     - type: RandomDistort
     - type: RandomBlur
       prob: 0.1
     - type: RandomHorizontalFlip
     - type: Padding
-      target_size: [2048, 2048]
+      target_size: [512, 512]
     - type: Normalize
   mode: train
 
@@ -28,7 +29,7 @@ val_dataset:
   transforms:
     - type: LoadImages
     - type: ResizeByShort
-      short_size: 2048
+      short_size: 512
     - type: ResizeToIntMult
       mult_int: 128
     - type: Normalize
@@ -39,7 +40,7 @@ model:
   type: HumanMatting
   backbone:
     type: ResNet34_vd
-    pretrained: https://paddleseg.bj.bcebos.com/matting/models/ResNet34_vd_pretrained/model.pdparams
+    pretrained: /home/aistudio/.paddleseg/pretrained_model/dygraph/ResNet34_vd_pretrained.pdparams
   pretrained: Null
   if_refine: True
 

@@ -26,8 +26,7 @@ from paddleseg.utils import TimeAverager, calculate_eta, resume, logger
 from core.val import evaluate
 
 quant_config = {
-    'weight_preprocess_type': None,
-    'activation_preprocess_type': None,
+    'weight_preprocess_type': 'PACT',
     'weight_quantize_type': 'channel_wise_abs_max',
     'activation_quantize_type': 'moving_average_abs_max',
     'weight_bits': 8,

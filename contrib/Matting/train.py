@@ -101,7 +101,7 @@ def parse_args():
         '--quant',
         dest='isquant',
         help='quant train',
-        action='store_false')
+        action='store_true')
     parser.add_argument(
         '--use_vdl',
         dest='use_vdl',
