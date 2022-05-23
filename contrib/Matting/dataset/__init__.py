@@ -13,3 +13,4 @@
 # limitations under the License.
 
 from .matting_dataset import MattingDataset
+from .bgsub_dataset import  BgsubDataset
