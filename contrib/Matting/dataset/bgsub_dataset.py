@@ -20,9 +20,8 @@ import numpy as np
 import random
 import paddle
 from paddleseg.cvlibs import manager
-sys.path.append(r"D:\hqj\test\Pubilc\PaddleSeg\contrib\Matting")
 import transforms as T
-from BgsData import BgsData
+from .BgsData import BgsData
 
 @manager.DATASETS.add_component
 class BgsubDataset(paddle.io.Dataset):
