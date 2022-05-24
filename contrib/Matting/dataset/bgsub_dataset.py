@@ -68,7 +68,7 @@ class BgsubDataset(paddle.io.Dataset):
                  get_trimap=True,
                  separator=' ',
                  key_del=None,
-                 batch_size=10):
+                 batch_size=12):
         super().__init__()
         self.dataset_root = dataset_root
         self.transforms = T.Compose(transforms)
@@ -162,4 +162,4 @@ if __name__ == '__main__':
         return data
     ds = BgsubDataset(r"D:\hqj\test\private\ImageSpider", [testT], train_file='bgData', batch_size=3)
     print(len(ds))
-    print(ds[39])
+    # print(ds[39])

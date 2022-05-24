@@ -1,0 +1,42 @@
+batch_size: 12
+iters: 100000
+
+model:
+  type: MODNet
+  backbone:
+    type: HRNet_W18
+    pretrained: https://bj.bcebos.com/paddleseg/dygraph/hrnet_w18_ssld.tar.gz
+
+train_dataset:
+  type: bgsub_dataset
+  dataset_root: data/bgsData
+  train_file: bgData
+  transforms:
+    - type: LoadImages
+    - type: RandomDistort
+    - type: RandomBlur
+    - type: RandomHorizontalFlip
+    - type: Normalize
+  mode: train
+
+
+val_dataset:
+  type: bgsub_dataset
+  dataset_root: data/bgsData
+  val_file: bgDataOK
+  transforms:
+    - type: LoadImages
+    - type: Normalize
+  mode: val
+  get_trimap: False
+
+
+optimizer:
+  type: sgd
+  momentum: 0.9
+  weight_decay: 4.0e-5
+
+lr_scheduler:
+  type: PiecewiseDecay
+  boundaries: [40000, 80000]
+  values: [0.02, 0.002, 0.0002]
