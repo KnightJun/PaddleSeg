@@ -67,7 +67,7 @@ class BgsubDataset(paddle.io.Dataset):
                  get_trimap=True,
                  separator=' ',
                  key_del=None,
-                 batch_size=12):
+                 batch_size=6):
         super().__init__()
         self.dataset_root = dataset_root
         self.transforms = T.Compose(transforms)
@@ -129,6 +129,15 @@ class BgsubDataset(paddle.io.Dataset):
 
         data['trans_info'] = []  # Record shape change information
 
+        # Generate trimap from alpha if no trimap file provided
+        if self.get_trimap:
+            if 'trimap' not in data:
+                data['trimap'] = self.gen_trimap(
+                    data['alpha'], mode=self.mode).astype('float32')
+                data['gt_fields'].append('trimap')
+                if self.mode == 'val':
+                    data['ori_trimap'] = data['trimap'].copy()
+
         # Delete key which is not need
         if self.key_del is not None:
             for key in self.key_del:
@@ -146,6 +155,11 @@ class BgsubDataset(paddle.io.Dataset):
         for key in data.get('gt_fields', []):
             data[key] = data[key].astype('float32')
 
+        if 'trimap' in data:
+            data['trimap'] = data['trimap'][np.newaxis, :, :]
+        if 'ori_trimap' in data:
+            data['ori_trimap'] = data['ori_trimap'][np.newaxis, :, :]
+            
         data['alpha'] = data['alpha'][np.newaxis, :, :] / 255.
 
         return data
@@ -155,6 +169,31 @@ class BgsubDataset(paddle.io.Dataset):
             return sum(self.train_data_lenlist)
         else:
             return sum(self.val_data_lenlist)
+
+    @staticmethod
+    def gen_trimap(alpha, mode='train', eval_kernel=7):
+        if mode == 'train':
+            k_size = random.choice(range(2, 5))
+            iterations = np.random.randint(5, 15)
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                               (k_size, k_size))
+            dilated = cv2.dilate(alpha, kernel, iterations=iterations)
+            eroded = cv2.erode(alpha, kernel, iterations=iterations)
+            trimap = np.zeros(alpha.shape)
+            trimap.fill(128)
+            trimap[eroded > 254.5] = 255
+            trimap[dilated < 0.5] = 0
+        else:
+            k_size = eval_kernel
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                               (k_size, k_size))
+            dilated = cv2.dilate(alpha, kernel)
+            trimap = np.zeros(alpha.shape)
+            trimap.fill(128)
+            trimap[alpha >= 250] = 255
+            trimap[dilated <= 5] = 0
+
+        return trimap
 
 if __name__ == '__main__':
     def testT(data):
