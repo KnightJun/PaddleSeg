@@ -130,6 +130,7 @@ def predict(model,
         trimap_lists = [trimap_list] if trimap_list is not None else None
 
     logger.info("Start to predict...")
+ 
     progbar_pred = progbar.Progbar(target=len(img_lists[0]), verbose=1)
     preprocess_cost_averager = TimeAverager()
     infer_cost_averager = TimeAverager()
@@ -166,8 +167,8 @@ def predict(model,
 
             save_path = os.path.join(save_dir, im_file)
             mkdir(save_path)
-            save_alpha_pred(alpha_pred, save_path, trimap=trimap)
-            #save_merge_pred(im_path, alpha_pred, save_path, trimap=trimap)
+            #save_alpha_pred(alpha_pred, save_path, trimap=trimap)
+            save_merge_pred(im_path, alpha_pred, save_path, trimap=trimap)
 
             postprocess_cost_averager.record(time.time() - postprocess_start)
 

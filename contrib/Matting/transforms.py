@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
 import random
+from turtle import width
 
 import cv2
 import numpy as np
@@ -82,7 +84,32 @@ class LoadImages:
                 data[key] = cv2.cvtColor(data[key], cv2.COLOR_BGR2RGB)
 
         return data
+def find_nearestIdx(RemRadios, a0):
+    idx = np.abs(RemRadios - a0).argmin()
+    return idx
+@manager.TRANSFORMS.add_component
+class ResizeToPixels:
+    def __init__(self, pixels=500000):
+        self.RemRadios = np.array([0.67, 1, 1.33, 1.5, 1.78])
+        self.pixels = pixels
 
+    def __call__(self, data):
+        data['trans_info'].append(('resize', data['img'].shape[0:2]))
+        whRadio = data['img'].shape[1] / data['img'].shape[0]
+        whRadio = self.RemRadios[find_nearestIdx(self.RemRadios, whRadio)]
+        height = math.sqrt(self.pixels / whRadio)
+        width = height * whRadio
+        height = round(height / 32) * 32
+        width = round(width / 32) * 32
+        target_size = (width,height)
+        data['img'] = functional.resize(data['img'], target_size)
+        for key in data.get('gt_fields', []):
+            if key == 'trimap':
+                data[key] = functional.resize(data[key], target_size,
+                                              cv2.INTER_NEAREST)
+            else:
+                data[key] = functional.resize(data[key], target_size)
+        return data
 
 @manager.TRANSFORMS.add_component
 class Resize:
