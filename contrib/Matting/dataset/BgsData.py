@@ -41,8 +41,8 @@ class BgsData:
             self.fileHandle = open(dataPath, 'rb+')
         else:
             self.fileHandle = None
-            self.ImagesPath = os.path.split(metaPath)[0] + "Images"
-            self.MasksPath = os.path.split(metaPath)[0] + "Masks"
+            self.ImagesPath = os.path.join(os.path.split(metaPath)[0], "Images")
+            self.MasksPath = os.path.join(os.path.split(metaPath)[0], "Masks")
         self.metaPath = metaPath
         pass
 
@@ -51,8 +51,8 @@ class BgsData:
             self.fileHandle = open(dataPath, 'wb')
         else:
             self.fileHandle = None
-            self.ImagesPath = os.path.split(metaPath)[0] + "Images"
-            self.MasksPath = os.path.split(metaPath)[0] + "Masks"
+            self.ImagesPath = os.path.join(os.path.split(metaPath)[0], "Images")
+            self.MasksPath = os.path.join(os.path.split(metaPath)[0], "Masks")
         self.metaPath = metaPath
         self.nameDict = {}
         for i in RemRadios:
