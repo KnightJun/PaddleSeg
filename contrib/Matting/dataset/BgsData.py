@@ -35,14 +35,24 @@ class BgsData:
             width = round(width / 32) * 32
             self.sizeList.append((width, height))
 
-    def openData(self, metaPath:str, dataPath:str):
+    def openData(self, metaPath:str, dataPath:str = None):
         self.metaData, self.nameDict, RemRadios = pickle.load(open(metaPath, 'rb'))
-        self.fileHandle = open(dataPath, 'rb+')
+        if dataPath:
+            self.fileHandle = open(dataPath, 'rb+')
+        else:
+            self.fileHandle = None
+            self.ImagesPath = os.path.split(metaPath)[0] + "Images"
+            self.MasksPath = os.path.split(metaPath)[0] + "Masks"
         self.metaPath = metaPath
         pass
 
-    def creatData(self, metaPath:str, dataPath:str):
-        self.fileHandle = open(dataPath, 'wb')
+    def creatData(self, metaPath:str, dataPath:str = None):
+        if dataPath:
+            self.fileHandle = open(dataPath, 'wb')
+        else:
+            self.fileHandle = None
+            self.ImagesPath = os.path.split(metaPath)[0] + "Images"
+            self.MasksPath = os.path.split(metaPath)[0] + "Masks"
         self.metaPath = metaPath
         self.nameDict = {}
         for i in RemRadios:
@@ -54,13 +64,32 @@ class BgsData:
         return self.fileHandle.read(size)
 
     def getData(self, radiaIndex:int, dataIndex:int) -> tuple:
-        imagePos, imageSize = self.metaData[radiaIndex][dataIndex]['image']
-        maskPos, maskSize   = self.metaData[radiaIndex][dataIndex]['mask']
-        return self.getFileData(imagePos, imageSize), self.getFileData(maskPos, maskSize)
+        if self.fileHandle:
+            imagePos, imageSize = self.metaData[radiaIndex][dataIndex]['image']
+            maskPos, maskSize   = self.metaData[radiaIndex][dataIndex]['mask']
+            return self.getFileData(imagePos, imageSize), self.getFileData(maskPos, maskSize)
+        else:
+            name = self.metaData[radiaIndex][dataIndex]['name']
+            imgagePath = os.path.join(self.ImagesPath, name + ".webp")
+            maskPath = os.path.join(self.MasksPath, name + ".webp")
+            return open(imgagePath, 'rb').read(), open(maskPath, 'rb').read()
 
-    def getImageData(self, radiaIndex:int, dataIndex:int) -> tuple:
+    def getImageData(self, radiaIndex:int, dataIndex:int, resize = True) -> tuple:
         imgBuff, mskBuff = self.getData(radiaIndex, dataIndex)
-        return bytesToCv2(imgBuff), bytesToCv2(mskBuff, cv2.IMREAD_GRAYSCALE)
+        img, mask = bytesToCv2(imgBuff), bytesToCv2(mskBuff, cv2.IMREAD_GRAYSCALE)
+        if resize:
+            img, mask = cv2.resize(img, self.sizeList[radiaIndex]), cv2.resize(mask, self.sizeList[radiaIndex])
+        return img, mask
+
+    def addDataMeta(self, name:str, width:int, height:int):
+        fData = {}
+        fData['name'] = name
+        if fData['name'] in self.nameDict:
+            return
+        whRadio = width / height # 获取图像的宽高比
+        nIdx = find_nearestIdx(whRadio)
+        self.metaData[nIdx].append(fData)
+        self.nameDict[fData['name']] = (nIdx, len(self.metaData[nIdx]) - 1)
 
     def addData(self, imagePath:str, maskPath:str):
         fData = {}
@@ -86,7 +115,8 @@ class BgsData:
 
     def save(self):
         pickle.dump((self.metaData, self.nameDict, RemRadios), open(self.metaPath, 'wb'))
-        self.fileHandle.flush()
+        if self.fileHandle:
+            self.fileHandle.flush()
 
     def getRadios(self)-> list:
         return list(RemRadios)
