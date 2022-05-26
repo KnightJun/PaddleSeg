@@ -46,7 +46,8 @@ def save_merge_pred(imgpath, alpha, path, trimap=None):
         alpha[trimap == 0] = 0
         alpha[trimap == 255] = 255
     img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
-    img = cv2.resize(img, alpha.shape[::-1])
+    # img = cv2.resize(img, alpha.shape[::-1])
+    alpha = cv2.resize(alpha, (img.shape[1], img.shape[0]))
     B, G, R = cv2.split(img)
     alpha = (alpha).astype('uint8')
     img = cv2.merge([B, G, R, alpha])
