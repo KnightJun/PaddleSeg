@@ -13,8 +13,6 @@ train_dataset:
   train_file: bgData
   transforms:
     - type: LoadImages
-    - type: ResizeToPixels
-      pixels: 500000
     - type: RandomDistort
     - type: RandomBlur
     - type: RandomHorizontalFlip
@@ -28,8 +26,6 @@ val_dataset:
   val_file: bgDataOK
   transforms:
     - type: LoadImages
-    - type: ResizeToPixels
-      pixels: 500000
     - type: Normalize
   mode: val
   get_trimap: False
