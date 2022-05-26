@@ -109,6 +109,7 @@ class BgsubDataset(paddle.io.Dataset):
             self.val_data.openData(metaFile, dataFile)
             radiosLen = len(self.val_data.getRadios())
             self.val_data_lenlist = [ int(self.val_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
+        print(f"BgsubDataset mode:{mode}, size:{len(self)}")
 
     def __getitem__(self, idx):
         radiusIdx = 0
