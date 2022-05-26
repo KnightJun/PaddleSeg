@@ -104,16 +104,21 @@ class BgsubDataset(paddle.io.Dataset):
         radiosLen = len(self.train_data.getRadios())
         self.train_data_lenlist = [ int(self.train_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
 
-        print(f"BgsubDataset mode:{mode}, size:{len(self)}")
+        print(f"BgsubDataset mode:{mode}, size:{len(self)}, batch_size:{batch_size}")
         print("GenerBatchInx...")
         self.batch_index = []
+        head_index = [] # 先试一遍各种比例看会不会爆显存
         for i, v in enumerate(self.train_data_lenlist):
             for i2 in range(int(v / self.batch_size)):
-                self.batch_index.append((i, i2 * self.batch_size))
+                if i2 == 0:
+                    head_index.append((i, i2 * self.batch_size))
+                else:
+                    self.batch_index.append((i, i2 * self.batch_size))
         random.seed(0)
         print("befor shuffle:", self.batch_index[0])
         random.shuffle(self.batch_index)
         print("after shuffle:", self.batch_index[0])
+        self.batch_index += head_index
         print("batch index Size:", len(self.batch_index))
 
 
