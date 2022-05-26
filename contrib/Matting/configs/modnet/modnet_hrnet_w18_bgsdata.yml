@@ -1,5 +1,5 @@
-batch_size: 6
-iters: 100000
+batch_size: 10
+iters: 1000000
 
 model:
   type: MODNet
