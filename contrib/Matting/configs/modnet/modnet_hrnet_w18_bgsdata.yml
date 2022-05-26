@@ -30,6 +30,7 @@ val_dataset:
     - type: Normalize
   mode: val
   get_trimap: False
+  batch_size: 9
 
 
 optimizer:
