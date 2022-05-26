@@ -10,7 +10,7 @@ model:
 train_dataset:
   type: BgsubDataset
   dataset_root: data/bgsData
-  train_file: bgData
+  train_file: train
   transforms:
     - type: LoadImages
     - type: RandomDistort
@@ -23,7 +23,7 @@ train_dataset:
 val_dataset:
   type: BgsubDataset
   dataset_root: data/bgsData
-  val_file: bgDataOK
+  val_file: val
   transforms:
     - type: LoadImages
     - type: Normalize

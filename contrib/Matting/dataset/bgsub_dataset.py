@@ -87,8 +87,12 @@ class BgsubDataset(paddle.io.Dataset):
                 raise ValueError(
                     "When `mode` is 'train' or 'trainval', `train_file must be provided!"
                 )
+            metaFile = os.path.join(dataset_root, train_file + ".meta")
+            dataFile = os.path.join(dataset_root, train_file + ".data")
+            if not os.path.isfile(dataFile):
+                dataFile = None
             self.train_data = BgsData()
-            self.train_data.openData(os.path.join(dataset_root, train_file + ".meta"), os.path.join(dataset_root, train_file + ".data"))
+            self.train_data.openData(metaFile, dataFile)
             radiosLen = len(self.train_data.getRadios())
             self.train_data_lenlist = [ int(self.train_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
 
@@ -97,8 +101,12 @@ class BgsubDataset(paddle.io.Dataset):
                 raise ValueError(
                     "When `mode` is 'val' or 'trainval', `val_file must be provided!"
                 )
+            metaFile = os.path.join(dataset_root, val_file + ".meta")
+            dataFile = os.path.join(dataset_root, val_file + ".data")
+            if not os.path.isfile(dataFile):
+                dataFile = None
             self.val_data = BgsData()
-            self.val_data.openData(os.path.join(dataset_root, val_file + ".meta"), os.path.join(dataset_root, val_file + ".data"))
+            self.val_data.openData(metaFile, dataFile)
             radiosLen = len(self.val_data.getRadios())
             self.val_data_lenlist = [ int(self.val_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
 
