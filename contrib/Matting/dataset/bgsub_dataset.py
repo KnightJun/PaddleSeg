@@ -118,7 +118,7 @@ class BgsubDataset(paddle.io.Dataset):
         print("befor shuffle:", self.batch_index[0])
         random.shuffle(self.batch_index)
         print("after shuffle:", self.batch_index[0])
-        self.batch_index += head_index
+        self.batch_index = head_index + self.batch_index
         print("batch index Size:", len(self.batch_index))
 
 
@@ -127,6 +127,7 @@ class BgsubDataset(paddle.io.Dataset):
         batchMod = idx % self.batch_size
         radiusIdx, idx = self.batch_index[idx // self.batch_size]
         idx += batchMod
+        # return radiusIdx, idx
         fg, alpha = self.train_data.getImageData(radiusIdx, idx)
         data['alpha'] = alpha
         data['gt_fields'] = []
@@ -209,6 +210,6 @@ if __name__ == '__main__':
     def testT(data):
         return data
     ds = BgsubDataset(r"D:\hqj\test\private\ImageSpider", [testT], train_file='train', batch_size=10)
-    for i in range(500):
-        print(ds[i*10])
+    for i in range(80):
+        print(ds[i])
     # print(ds[39])
