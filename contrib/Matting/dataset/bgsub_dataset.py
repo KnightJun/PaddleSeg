@@ -20,8 +20,9 @@ import numpy as np
 import random
 import paddle
 from paddleseg.cvlibs import manager
+sys.path.append(r"D:\hqj\test\Pubilc\PaddleSeg\contrib\Matting")
 import transforms as T
-from .BgsData import BgsData
+from BgsData import BgsData
 
 @manager.DATASETS.add_component
 class BgsubDataset(paddle.io.Dataset):
@@ -89,40 +90,38 @@ class BgsubDataset(paddle.io.Dataset):
                 )
             metaFile = os.path.join(dataset_root, train_file + ".meta")
             dataFile = os.path.join(dataset_root, train_file + ".data")
-            if not os.path.isfile(dataFile):
-                dataFile = None
-            self.train_data = BgsData()
-            self.train_data.openData(metaFile, dataFile)
-            radiosLen = len(self.train_data.getRadios())
-            self.train_data_lenlist = [ int(self.train_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
-
-        if mode == 'val' or mode == 'trainval':
+        elif mode == 'val' or mode == 'trainval':
             if val_file is None:
                 raise ValueError(
                     "When `mode` is 'val' or 'trainval', `val_file must be provided!"
                 )
             metaFile = os.path.join(dataset_root, val_file + ".meta")
             dataFile = os.path.join(dataset_root, val_file + ".data")
-            if not os.path.isfile(dataFile):
-                dataFile = None
-            self.val_data = BgsData()
-            self.val_data.openData(metaFile, dataFile)
-            radiosLen = len(self.val_data.getRadios())
-            self.val_data_lenlist = [ int(self.val_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
+        if not os.path.isfile(dataFile):
+            dataFile = None
+        self.train_data = BgsData()
+        self.train_data.openData(metaFile, dataFile)
+        radiosLen = len(self.train_data.getRadios())
+        self.train_data_lenlist = [ int(self.train_data.getRadiosDataSize(i) / batch_size) * batch_size for i in range(radiosLen) ]
+
         print(f"BgsubDataset mode:{mode}, size:{len(self)}")
+        print("GenerBatchInx...")
+        self.batch_index = []
+        for i, v in enumerate(self.train_data_lenlist):
+            for i2 in range(int(v / self.batch_size)):
+                self.batch_index.append((i, i2 * self.batch_size))
+        random.seed(0)
+        print("befor shuffle:", self.batch_index[0])
+        random.shuffle(self.batch_index)
+        print("after shuffle:", self.batch_index[0])
+        print("batch index Size:", len(self.batch_index))
+
 
     def __getitem__(self, idx):
-        radiusIdx = 0
-        if self.mode == 'val':
-            self.train_data = self.val_data
-            self.train_data_lenlist = self.val_data_lenlist
         data = {}
-        for v in self.train_data_lenlist:
-            if idx < v:
-                break
-            idx -= v
-            radiusIdx += 1
-        
+        batchMod = idx % self.batch_size
+        radiusIdx, idx = self.batch_index[idx // self.batch_size]
+        idx += batchMod
         fg, alpha = self.train_data.getImageData(radiusIdx, idx)
         data['alpha'] = alpha
         data['gt_fields'] = []
@@ -174,10 +173,7 @@ class BgsubDataset(paddle.io.Dataset):
         return data
 
     def __len__(self):
-        if self.mode == 'train':
-            return sum(self.train_data_lenlist)
-        else:
-            return sum(self.val_data_lenlist)
+        return sum(self.train_data_lenlist)
 
     @staticmethod
     def gen_trimap(alpha, mode='train', eval_kernel=7):
@@ -207,6 +203,7 @@ class BgsubDataset(paddle.io.Dataset):
 if __name__ == '__main__':
     def testT(data):
         return data
-    ds = BgsubDataset(r"D:\hqj\test\private\ImageSpider", [testT], train_file='bgData', batch_size=3)
-    print(len(ds))
+    ds = BgsubDataset(r"D:\hqj\test\private\ImageSpider", [testT], train_file='train', batch_size=10)
+    for i in range(500):
+        print(ds[i*10])
     # print(ds[39])
