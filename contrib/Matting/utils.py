@@ -27,7 +27,7 @@ def get_files(root_path):
 def get_image_list(image_path):
     """Get image list"""
     valid_suffix = [
-        '.JPEG', '.jpeg', '.JPG', '.jpg', '.BMP', '.bmp', '.PNG', '.png', '.webp'
+        '.JPEG', '.jpeg', '.JPG', '.jpg', '.BMP', '.bmp', '.PNG', '.png', '.webp', '.jfif'
     ]
     image_list = []
     image_dir = None
