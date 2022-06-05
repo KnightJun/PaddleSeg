@@ -56,6 +56,11 @@ def parse_args():
         help='The directory for saving the model snapshot',
         type=str,
         default='./output/results')
+    parser.add_argument(
+        '--quant',
+        dest='isquant',
+        help='quant train',
+        action='store_true')
 
     return parser.parse_args()
 
@@ -102,7 +107,8 @@ def main(args):
         image_list=image_list,
         image_dir=image_dir,
         trimap_list=trimap_list,
-        save_dir=args.save_dir)
+        save_dir=args.save_dir,
+        isquant=args.isquant)
 
 
 if __name__ == '__main__':

@@ -21,11 +21,23 @@ import numpy as np
 import paddle
 import paddle.nn.functional as F
 from paddleseg import utils
+import paddleslim
 from paddleseg.core import infer
 from paddleseg.utils import logger, progbar, TimeAverager
 
 from utils import mkdir
 
+quant_config = {
+    'weight_preprocess_type': 'PACT',
+    'weight_quantize_type': 'channel_wise_abs_max',
+    'activation_quantize_type': 'moving_average_abs_max',
+    'weight_bits': 8,
+    'activation_bits': 8,
+    'dtype': 'int8',
+    'window_size': 10000,
+    'moving_rate': 0.9,
+    'quantizable_layer_type': ['Conv2D', 'Linear'],
+}
 
 def partition_list(arr, m):
     """split the list 'arr' into m pieces"""
@@ -105,7 +117,8 @@ def predict(model,
             image_list,
             image_dir=None,
             trimap_list=None,
-            save_dir='output'):
+            save_dir='output',
+            isquant=False):
     """
     predict and visualize the image_list.
 
@@ -118,6 +131,11 @@ def predict(model,
         trimap_list (list, optional): A list of trimap of image_list. Default: None.
         save_dir (str, optional): The directory to save the visualized results. Default: 'output'.
     """
+    logger.info('isquant: {}'.format(isquant))
+    if isquant:
+        logger.info('quant predict')
+        quanter = paddleslim.QAT(config=quant_config)
+        quanter.quantize(model)
     utils.utils.load_entire_model(model, model_path)
     model.eval()
     nranks = paddle.distributed.get_world_size()

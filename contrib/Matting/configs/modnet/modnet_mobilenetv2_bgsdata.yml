@@ -1,0 +1,13 @@
+batch_size: 9
+iters: 1000000
+_base_: modnet_hrnet_w18_bgsdata.yml
+model:
+  backbone:
+    type: MobileNetV2
+    pretrained: https://paddleseg.bj.bcebos.com/matting/models/MobileNetV2_pretrained/model.pdparams
+
+train_dataset:
+  batch_size: 9
+
+val_dataset:
+  batch_size: 9
