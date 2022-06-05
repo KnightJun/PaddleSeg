@@ -82,7 +82,8 @@ def train(model,
           use_vdl=False,
           losses=None,
           keep_checkpoint_max=5,
-          eval_begin_iters=None):
+          eval_begin_iters=None,
+          use_fp16 = False):
     """
     Launch training.
     Args:
@@ -111,6 +112,14 @@ def train(model,
         logger.info('quant train')
         quanter = paddleslim.QAT(config=quant_config)
         quanter.quantize(model)
+    if use_fp16:
+        logger.info('use_fp16')
+        # Step1：定义 GradScaler，用于缩放loss比例，避免浮点数溢出
+        scaler = paddle.amp.GradScaler(init_loss_scaling=1024)
+
+        # Step2：在level=’O2‘模式下，将网络参数从FP32转换为FP16
+        model = paddle.amp.decorate(models=model, level='O2')
+
     model.train()
     nranks = paddle.distributed.ParallelEnv().nranks
     local_rank = paddle.distributed.ParallelEnv().local_rank
@@ -164,16 +173,29 @@ def train(model,
                 break
             reader_cost_averager.record(time.time() - batch_start)
 
-            # model input
-            if nranks > 1:
-                logit_dict = ddp_model(data)
+            if use_fp16:
+                # Step3：创建AMP上下文环境，开启自动混合精度训练
+                with paddle.amp.auto_cast(level='O2'):
+                    if nranks > 1:
+                        logit_dict = ddp_model(data)
+                    else:
+                        logit_dict = model(data)
             else:
-                logit_dict = model(data)
+                # model input
+                if nranks > 1:
+                    logit_dict = ddp_model(data)
+                else:
+                    logit_dict = model(data)
             loss_dict = model.loss(logit_dict, data, losses)
 
             loss_dict['all'].backward()
-
-            optimizer.step()
+            if use_fp16:
+                scaled = scaler.scale(loss_dict['all'])
+                scaled.backward()
+                scaler.step(optimizer)       # 更新参数
+                scaler.update()              # 更新用于 loss 缩放的比例因子
+            else:
+                optimizer.step()
             lr = optimizer.get_lr()
             if isinstance(optimizer._learning_rate,
                           paddle.optimizer.lr.LRScheduler):

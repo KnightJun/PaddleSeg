@@ -103,6 +103,11 @@ def parse_args():
         help='quant train',
         action='store_true')
     parser.add_argument(
+        '--use_fp16',
+        dest='use_fp16',
+        help='use fp16 train',
+        action='store_true')
+    parser.add_argument(
         '--use_vdl',
         dest='use_vdl',
         help='Whether to record the data to VisualDL during training',
@@ -179,7 +184,8 @@ def main(args):
         params_preload=args.params_preload,
         isquant=args.isquant,
         save_dir=args.save_dir,
-        eval_begin_iters=args.eval_begin_iters)
+        eval_begin_iters=args.eval_begin_iters,
+        use_fp16=args.use_fp16)
 
 
 if __name__ == '__main__':
