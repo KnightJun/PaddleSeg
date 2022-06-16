@@ -120,3 +120,4 @@ test_tipc/web/models/
 /contrib/Matting/data
 /contrib/Matting/output
 /contrib/Matting/params
+contrib/Matting/output_fg_estimate

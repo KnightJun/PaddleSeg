@@ -61,6 +61,12 @@ def parse_args():
         dest='isquant',
         help='quant train',
         action='store_true')
+    parser.add_argument(
+        '--fg_estimate',
+        default=True,
+        type=eval,
+        choices=[True, False],
+        help='Whether to estimate foreground when predicting.')
 
     return parser.parse_args()
 
@@ -108,7 +114,8 @@ def main(args):
         image_dir=image_dir,
         trimap_list=trimap_list,
         save_dir=args.save_dir,
-        isquant=args.isquant)
+        isquant=args.isquant,
+        fg_estimate=args.fg_estimate)
 
 
 if __name__ == '__main__':

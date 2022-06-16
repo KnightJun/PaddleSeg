@@ -25,7 +25,7 @@ import paddleslim
 from paddleseg.core import infer
 from paddleseg.utils import logger, progbar, TimeAverager
 
-from utils import mkdir
+from utils import mkdir, estimate_foreground_ml
 
 quant_config = {
     'weight_preprocess_type': 'PACT',
@@ -45,7 +45,7 @@ def partition_list(arr, m):
     return [arr[i:i + n] for i in range(0, len(arr), n)]
 
 
-def save_merge_pred(imgpath, alpha, path, trimap=None):
+def save_merge_pred(imgpath, alpha, path, trimap=None, fg_estimate=False):
     """
     The value of alpha is range [0, 1], shape should be [h,w]
     """
@@ -60,6 +60,9 @@ def save_merge_pred(imgpath, alpha, path, trimap=None):
     img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
     # img = cv2.resize(img, alpha.shape[::-1])
     alpha = cv2.resize(alpha, (img.shape[1], img.shape[0]))
+    if fg_estimate:
+        img = estimate_foreground_ml(img / 255.0, alpha / 255.0) * 255
+        img = img.astype('uint8')
     B, G, R = cv2.split(img)
     alpha = (alpha).astype('uint8')
     img = cv2.merge([B, G, R, alpha])
@@ -118,7 +121,8 @@ def predict(model,
             image_dir=None,
             trimap_list=None,
             save_dir='output',
-            isquant=False):
+            isquant=False,
+            fg_estimate=False):
     """
     predict and visualize the image_list.
 
@@ -188,6 +192,10 @@ def predict(model,
             mkdir(save_path)
             #save_alpha_pred(alpha_pred, save_path, trimap=trimap)
             save_merge_pred(im_path, alpha_pred, save_path, trimap=trimap)
+            if fg_estimate:
+                save_path = os.path.join(save_dir + "_fg_estimate", im_file)
+                mkdir(save_path)
+                save_merge_pred(im_path, alpha_pred, save_path, trimap=trimap, fg_estimate=fg_estimate)
 
             postprocess_cost_averager.record(time.time() - postprocess_start)
 
