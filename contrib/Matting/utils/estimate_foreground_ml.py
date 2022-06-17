@@ -80,15 +80,15 @@ def _estimate_fb_ml(
     w_prev = 1
     h_prev = 1
 
-    F_prev = np.empty((h_prev, w_prev, depth), dtype=dtype)
-    B_prev = np.empty((h_prev, w_prev, depth), dtype=dtype)
+    F_prev = np.zeros((h_prev, w_prev, depth), dtype=dtype)
+    B_prev = np.zeros((h_prev, w_prev, depth), dtype=dtype)
 
     n_levels = int(np.ceil(np.log2(max(w0, h0))))
 
     for i_level in range(n_levels + 1):
         w = round(w0**(i_level / n_levels))
         h = round(h0**(i_level / n_levels))
-
+        # print("h", h, "w", w)
         image = np.empty((h, w, depth), dtype=dtype)
         alpha = np.empty((h, w), dtype=dtype)
 
