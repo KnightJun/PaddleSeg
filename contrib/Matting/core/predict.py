@@ -182,9 +182,23 @@ def predict(model,
             infer_start = time.time()
             alpha_pred = model(data)
             # predict by ONNX Runtime
+            if False:
+                import ncnn
+                net = ncnn.Net()
+                net.load_param("onnx.save/modnet_ncnn.param")
+                net.load_model("onnx.save/modnet_ncnn.bin")
+                mat_np  = data['img'].numpy()[0]
+                mat_in = ncnn.Mat(mat_np)
+                ex = net.create_extractor()
+                ex.input("x", mat_in)
+                ret, mat_out = ex.extract("save_infer_model/scale_0.tmp_0")
+                mat_out_np = np.array(mat_out)
+                print("mat_out_np:", mat_out_np.shape)
+                np.testing.assert_allclose(np.expand_dims(mat_out_np, 0), alpha_pred.numpy(), rtol=1.0, atol=1e-05)
+                exit()
             if True:
                 import onnxruntime
-                ort_sess = onnxruntime.InferenceSession('onnx.save/modnet.onnx')
+                ort_sess = onnxruntime.InferenceSession('onnx.save/modnet_sim.onnx')
                 ort_inputs = {ort_sess.get_inputs()[0].name: data['img'].numpy()}
                 ort_outs = ort_sess.run(None, ort_inputs)
                 print("Exported model has been predicted by ONNXRuntime!")
