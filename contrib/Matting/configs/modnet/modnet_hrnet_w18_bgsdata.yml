@@ -28,6 +28,7 @@ val_dataset:
   transforms:
     - type: LoadImages
     - type: Normalize
+    - type: ResizeToPixels
   mode: val
   get_trimap: False
   batch_size: 9

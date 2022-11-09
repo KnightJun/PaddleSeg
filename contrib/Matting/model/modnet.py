@@ -53,7 +53,11 @@ class MODNet(nn.Layer):
         If training, return a dict.
         If evaluation, return the final alpha prediction.
         """
-        x = inputs['img']
+        x = None
+        if type(inputs) is dict:
+            x = inputs['img']
+        else:
+            x = inputs
         # print("input shape:", x.shape)
         # print("feat_channels:", self.backbone.feat_channels)
         feat_list = self.backbone(x)
@@ -162,9 +166,14 @@ class MODNetHead(nn.Layer):
         self.init_weight()
 
     def forward(self, inputs, feat_list):
+        x = None
+        if type(inputs) is dict:
+            x = inputs['img']
+        else:
+            x = inputs
         pred_semantic, lr8x, [enc2x, enc4x] = self.lr_branch(feat_list)
-        pred_detail, hr2x = self.hr_branch(inputs['img'], enc2x, enc4x, lr8x)
-        pred_matte = self.f_branch(inputs['img'], lr8x, hr2x)
+        pred_detail, hr2x = self.hr_branch(x, enc2x, enc4x, lr8x)
+        pred_matte = self.f_branch(x, lr8x, hr2x)
 
         if self.training:
             logit_dict = {

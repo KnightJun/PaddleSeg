@@ -24,6 +24,7 @@ from paddleseg import utils
 import paddleslim
 from paddleseg.core import infer
 from paddleseg.utils import logger, progbar, TimeAverager
+from paddle.static import InputSpec
 
 from utils import mkdir, estimate_foreground_ml
 
@@ -142,6 +143,13 @@ def predict(model,
         quanter.quantize(model)
     utils.utils.load_entire_model(model, model_path)
     model.eval()
+    # 保存为onnx
+    if False:
+        save_path = 'onnx.save/modnet'
+        x_spec = InputSpec([1, 3, None, None], 'float32', 'x')
+        paddle.onnx.export(model, save_path, input_spec=[x_spec], opset_version=11)
+        print("ONNX convert finish, exit.")
+        exit()
     nranks = paddle.distributed.get_world_size()
     local_rank = paddle.distributed.get_rank()
     if nranks > 1:
@@ -173,6 +181,18 @@ def predict(model,
 
             infer_start = time.time()
             alpha_pred = model(data)
+            # predict by ONNX Runtime
+            if True:
+                import onnxruntime
+                ort_sess = onnxruntime.InferenceSession('onnx.save/modnet.onnx')
+                ort_inputs = {ort_sess.get_inputs()[0].name: data['img'].numpy()}
+                ort_outs = ort_sess.run(None, ort_inputs)
+                print("Exported model has been predicted by ONNXRuntime!")
+                # compare ONNX Runtime and Paddle results
+                np.testing.assert_allclose(ort_outs[0], alpha_pred.numpy(), rtol=1.0, atol=1e-05)
+                print("The difference of results between ONNXRuntime and Paddle looks good!")
+                exit()
+
             infer_cost_averager.record(time.time() - infer_start)
 
             postprocess_start = time.time()
