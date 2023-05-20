@@ -20,7 +20,8 @@ import numpy as np
 import random
 import paddle
 from paddleseg.cvlibs import manager
-sys.path.append("/root/PaddleSeg/Matting/ppmatting")
+mattingPath = (os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../"))
+sys.path.append(mattingPath)
 import transforms as T
 from .BgsData import BgsData
 

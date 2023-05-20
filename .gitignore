@@ -119,3 +119,5 @@ test_tipc/web/models/
 # EISeg
 EISeg/eiseg/config/setting.txt
 Matting/data
+Matting/output
+Matting/test_images

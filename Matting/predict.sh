@@ -1,0 +1,1 @@
+python tools/predict.py --config configs/ppmattingv2/ppmattingv2-stdc1-bgsdata.yml --model_path params/model.pdparams --image_path test_images --save_dir ./output/results --fg_estimate False
