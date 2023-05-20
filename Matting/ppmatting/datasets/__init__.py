@@ -15,3 +15,4 @@
 from .matting_dataset import MattingDataset
 from .composition_1k import Composition1K
 from .distinctions_646 import Distinctions646
+from .bgsub_dataset import BgsubDataset

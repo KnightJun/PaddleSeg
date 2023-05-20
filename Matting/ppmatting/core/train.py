@@ -162,7 +162,7 @@ def train(model,
             ddp_model = paddle.DataParallel(model)
 
     batch_sampler = paddle.io.DistributedBatchSampler(
-        train_dataset, batch_size=batch_size, shuffle=True, drop_last=True)
+        train_dataset, batch_size=batch_size, shuffle=False, drop_last=True)
 
     loader = paddle.io.DataLoader(
         train_dataset,
