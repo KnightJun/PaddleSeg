@@ -121,3 +121,4 @@ EISeg/eiseg/config/setting.txt
 Matting/data
 Matting/output
 Matting/test_images
+Matting/params
