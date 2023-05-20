@@ -1,4 +1,4 @@
-batch_size: 22  # total batch size: 16
+batch_size: 31  # 需要同步在BgsubDataset里面修改batch_size
 iters: 1000000
 
 train_dataset:

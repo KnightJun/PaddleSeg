@@ -112,6 +112,12 @@ def parse_args():
         default=10,
         type=int)
     parser.add_argument(
+        '--log_image_iters',
+        dest='log_image_iters',
+        help='Log image to vdl.',
+        default=1000,
+        type=int)
+    parser.add_argument(
         '--use_vdl',
         dest='use_vdl',
         help='Whether to record the data to VisualDL during training',
@@ -212,7 +218,8 @@ def main(args):
         metrics=args.metrics,
         precision=args.precision,
         amp_level=args.amp_level,
-        profiler_options=args.profiler_options)
+        profiler_options=args.profiler_options,
+        log_image_iters=args.log_image_iters)
 
 
 if __name__ == '__main__':

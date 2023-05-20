@@ -68,7 +68,7 @@ class BgsubDataset(paddle.io.Dataset):
                  get_trimap=True,
                  separator=' ',
                  key_del=None,
-                 batch_size=22):
+                 batch_size=31):
         super().__init__()
         self.dataset_root = dataset_root
         self.transforms = T.Compose(transforms)
