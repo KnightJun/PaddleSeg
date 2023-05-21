@@ -60,7 +60,7 @@ class PPMatting(nn.Layer):
         self.init_weight()
 
     def forward(self, inputs):
-        if inputs is map:
+        if type(inputs) is dict:
             x = inputs['img']
         else:
             x = inputs

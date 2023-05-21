@@ -25,6 +25,7 @@ from paddleseg.core import infer
 from paddleseg.utils import logger, progbar, TimeAverager
 
 from ppmatting.utils import mkdir, estimate_foreground_ml
+from ppmatting.utils import compareNcnnOnnx, onnxGetOut, ncnnGetOut
 
 
 def partition_list(arr, m):
@@ -130,13 +131,7 @@ def predict(model,
     """
     utils.utils.load_entire_model(model, model_path)
     model.eval()
-    if add_opt == "SaveOnnx":
-        save_path, _ = os.path.splitext(model_path)
-       # x_spec = paddle.static.InputSpec([1, 3, None, None], 'float32', 'x') # 指定动态尺寸
-        x_spec = paddle.static.InputSpec([1, 3, 576, 384], 'float32', 'x')
-        paddle.onnx.export(model, save_path, input_spec=[x_spec], opset_version=11)
-        print(f"ONNX save to ${save_path}.onnx, exit.")
-        exit()
+    model_path_no_suffix, _ = os.path.splitext(model_path)
     nranks = paddle.distributed.get_world_size()
     local_rank = paddle.distributed.get_rank()
     if nranks > 1:
@@ -159,11 +154,30 @@ def predict(model,
             trimap = trimap_lists[local_rank][
                 i] if trimap_list is not None else None
             data = preprocess(img=im_path, transforms=transforms, trimap=trimap)
+            if add_opt == "SaveOnnx":
+            # x_spec = paddle.static.InputSpec([1, 3, None, None], 'float32', 'x') # 指定动态尺寸
+                x_spec = paddle.static.InputSpec(data["img"].shape, 'float32', 'x')
+                paddle.onnx.export(model, model_path_no_suffix, input_spec=[x_spec], opset_version=11)
+                print(f"ONNX save to ${model_path_no_suffix}.onnx, exit.")
+                exit()
+            if add_opt == "CompareNcnnOnnx":
+                compareNcnnOnnx(data["img"].numpy(), model_path_no_suffix)
+                exit()
             preprocess_cost_averager.record(time.time() - preprocess_start)
 
             infer_start = time.time()
             result = model(data)
             infer_cost_averager.record(time.time() - infer_start)
+            if add_opt == "CheckNcnnOnnx":
+                indata = data["img"].numpy()
+                outdata = result.numpy()
+                onnxOut = onnxGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
+                np.testing.assert_allclose(onnxOut, outdata, rtol=1.0, atol=1e-05)
+                print("The difference of results between onnxOut and outdata looks good!")
+                ncnnOut = ncnnGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
+                np.testing.assert_allclose(ncnnOut, outdata, rtol=1.0, atol=1e-05)
+                print("The difference of results between ncnnOut and outdata looks good!")
+                exit()
 
             postprocess_start = time.time()
             if isinstance(result, paddle.Tensor):

@@ -140,7 +140,10 @@ class PPMattingV2(nn.Layer):
         self.init_weight()
 
     def forward(self, inputs):
-        img = inputs['img']
+        if type(inputs) is dict:
+            img = inputs['img']
+        else:
+            img = inputs
         input_shape = paddle.shape(img)
         feats_backbone = self.backbone(
             img)  # stdc1 [2x, 4x, 8x, 16x, 32x] [32, 64, 256, 512, 1024]
