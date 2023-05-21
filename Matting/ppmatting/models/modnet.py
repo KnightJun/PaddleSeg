@@ -53,6 +53,8 @@ class MODNet(nn.Layer):
         If training, return a dict.
         If evaluation, return the final alpha prediction.
         """
+        if inputs is not map:
+            inputs = {'img':inputs}
         x = inputs['img']
         feat_list = self.backbone(x)
         y = self.head(inputs=inputs, feat_list=feat_list)

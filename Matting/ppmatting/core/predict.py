@@ -114,7 +114,8 @@ def predict(model,
             image_dir=None,
             trimap_list=None,
             save_dir='output',
-            fg_estimate=True):
+            fg_estimate=True,
+            add_opt = None):
     """
     predict and visualize the image_list.
 
@@ -129,6 +130,13 @@ def predict(model,
     """
     utils.utils.load_entire_model(model, model_path)
     model.eval()
+    if add_opt == "SaveOnnx":
+        save_path, _ = os.path.splitext(model_path)
+       # x_spec = paddle.static.InputSpec([1, 3, None, None], 'float32', 'x') # 指定动态尺寸
+        x_spec = paddle.static.InputSpec([1, 3, 576, 384], 'float32', 'x')
+        paddle.onnx.export(model, save_path, input_spec=[x_spec], opset_version=11)
+        print(f"ONNX save to ${save_path}.onnx, exit.")
+        exit()
     nranks = paddle.distributed.get_world_size()
     local_rank = paddle.distributed.get_rank()
     if nranks > 1:

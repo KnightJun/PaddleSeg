@@ -60,7 +60,10 @@ class PPMatting(nn.Layer):
         self.init_weight()
 
     def forward(self, inputs):
-        x = inputs['img']
+        if inputs is map:
+            x = inputs['img']
+        else:
+            x = inputs
         input_shape = paddle.shape(x)
         fea_list = self.backbone(x)
 

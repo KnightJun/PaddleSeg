@@ -74,6 +74,12 @@ def parse_args():
         help='Set the device type, which may be GPU, CPU or XPU.',
         default='gpu',
         type=str)
+    parser.add_argument(
+        '--add_opt',
+        dest='add_opt',
+        help='SaveOnnx',
+        default='',
+        type=str)
 
     return parser.parse_args()
 
@@ -106,7 +112,8 @@ def main(args):
         image_dir=image_dir,
         trimap_list=trimap_list,
         save_dir=args.save_dir,
-        fg_estimate=args.fg_estimate)
+        fg_estimate=args.fg_estimate,
+        add_opt=args.add_opt)
 
 
 if __name__ == '__main__':
