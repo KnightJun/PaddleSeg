@@ -122,3 +122,6 @@ Matting/data
 Matting/output
 Matting/test_images
 Matting/params
+output
+testimage
+model
