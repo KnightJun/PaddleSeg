@@ -1,9 +1,7 @@
 7767517
-918 1132
+916 1132
 Input                    x                        0 1 x
-Split                    resize_ref_dym_0         1 0 x 
-Split                    resize_ref_dym_0         1 28 x resize_ref_0 resize_ref_1 resize_ref_2 resize_ref_3 resize_ref_4 resize_ref_5 resize_ref_6 resize_ref_7 resize_ref_8 resize_ref_9 resize_ref_10 resize_ref_11 resize_ref_12 resize_ref_13 resize_ref_14 resize_ref_15 resize_ref_16 resize_ref_17 resize_ref_18 resize_ref_19 resize_ref_20 resize_ref_21 resize_ref_22 resize_ref_23 resize_ref_24 resize_ref_25 resize_ref_26 resize_ref_27
-Split                    splitncnn_input0         1 4 x x_splitncnn_0 x_splitncnn_1 x_splitncnn_2 x_splitncnn_3
+Split                    splitncnn_input0         1 32 x x_splitncnn_0 x_splitncnn_1 x_splitncnn_2 x_splitncnn_3 resize_ref_0 resize_ref_1 resize_ref_2 resize_ref_3 resize_ref_4 resize_ref_5 resize_ref_6 resize_ref_7 resize_ref_8 resize_ref_9 resize_ref_10 resize_ref_11 resize_ref_12 resize_ref_13 resize_ref_14 resize_ref_15 resize_ref_16 resize_ref_17 resize_ref_18 resize_ref_19 resize_ref_20 resize_ref_21 resize_ref_22 resize_ref_23 resize_ref_24 resize_ref_25 resize_ref_26 resize_ref_27 
 Convolution              p2o.Conv.0               1 1 x_splitncnn_3 relu_0.tmp_0 0=64 1=3 3=2 4=-233 5=1 6=1728 9=1
 Split                    splitncnn_0              1 2 relu_0.tmp_0 relu_0.tmp_0_splitncnn_0 relu_0.tmp_0_splitncnn_1
 Convolution              p2o.Conv.1               1 1 relu_0.tmp_0_splitncnn_1 relu_1.tmp_0 0=64 1=3 3=2 4=-233 5=1 6=36864 9=1
@@ -78,7 +76,7 @@ BinaryOp                 p2o.Add.22               2 1 conv2d_360.tmp_0 relu_29.t
 ReLU                     p2o.Relu.31              1 1 p2o.Add.23 relu_31.tmp_0
 Split                    splitncnn_15             1 2 relu_31.tmp_0 relu_31.tmp_0_splitncnn_0 relu_31.tmp_0_splitncnn_1
 Convolution              p2o.Conv.33              1 1 relu_31.tmp_0_splitncnn_1 conv2d_361.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.0              2 1 conv2d_361.tmp_0 resize_ref_0 bilinear_interp_v2_0.tmp_0 0=2  1=0.25 2=0.25 
+Interp                   p2o.Resize.0              2 1 conv2d_361.tmp_0 resize_ref_0 bilinear_interp_v2_0.tmp_0 0=2 1=0.25 2=0.25 
 BinaryOp                 p2o.Add.24               2 1 relu_23.tmp_0_splitncnn_1 bilinear_interp_v2_0.tmp_0 p2o.Add.25
 ReLU                     p2o.Relu.32              1 1 p2o.Add.25 relu_32.tmp_0
 Split                    splitncnn_16             1 2 relu_32.tmp_0 relu_32.tmp_0_splitncnn_0 relu_32.tmp_0_splitncnn_1

@@ -44,5 +44,5 @@ def compareNcnnOnnx(inData, pathPrefix = "params/modnet"):
              token = token + ":" + token
         token = token.split(":")
         ncnnOut = ncnnGetOut(pathPrefix, inData, token[0])
-        np.testing.assert_allclose(ncnnOut, onnxOuts[token[1]], rtol=1.0, atol=1e-05)
+        np.testing.assert_allclose(ncnnOut, onnxOuts[token[1]], rtol=1e-01, atol=1e-5)
     print("The difference of results between ONNXRuntime and NCNN looks good!")

@@ -167,16 +167,26 @@ def predict(model,
             preprocess_cost_averager.record(time.time() - preprocess_start)
 
             infer_start = time.time()
-            result = model(data)
+            result = None
+            if add_opt == "UseNcnn":
+                indata = data["img"].numpy()
+                result = ncnnGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
+                result = paddle.to_tensor(result)
+            elif add_opt == "UseOnnx":
+                indata = data["img"].numpy()
+                result = onnxGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
+                result = paddle.to_tensor(result)
+            else:
+                result = model(data)
             infer_cost_averager.record(time.time() - infer_start)
             if add_opt == "CheckNcnnOnnx":
                 indata = data["img"].numpy()
                 outdata = result.numpy()
                 onnxOut = onnxGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
-                np.testing.assert_allclose(onnxOut, outdata, rtol=1.0, atol=1e-05)
+                np.testing.assert_allclose(onnxOut, outdata, rtol=1e-01, atol=1e-5)
                 print("The difference of results between onnxOut and outdata looks good!")
                 ncnnOut = ncnnGetOut(model_path_no_suffix, indata, "sigmoid_2.tmp_0")
-                np.testing.assert_allclose(ncnnOut, outdata, rtol=1.0, atol=1e-05)
+                np.testing.assert_allclose(ncnnOut, outdata, rtol=1e-01, atol=1e-5)
                 print("The difference of results between ncnnOut and outdata looks good!")
                 exit()
 

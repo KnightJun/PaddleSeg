@@ -14,15 +14,18 @@ def ReplaceInterpToDynamic(ncnnParams:str, srcSize:tuple, inputName = 'x'):
             addLayerCount+=1
     if addLayerCount == 0:
         print("No interp layer can be convert")
-    splitLine = f"Split                    resize_ref_dym_0         1 {addLayerCount} {inputName} " + " ".join([f"resize_ref_{x}" for x in range(addLayerCount)])
+    haveInputToken = False
     for i, nLine in enumerate(ncnnLines):
         countToken = re.match(r"^(?P<layerCount>\d+)\s+(?P<matCount>\d+)$", nLine)
-        inputToken = re.match(r"^Input\s+", nLine)
+        inputToken = re.match(r"^(?P<prefix>Split\s+splitncnn_input0\s+\d\s+)(?P<spOutCnt>\d+)(?P<suffix>.+)$", nLine)
         if countToken:
-            layerCnt, matCnt = int(countToken['layerCount']) + 1, int(countToken['matCount']) + addLayerCount
+            layerCnt, matCnt = int(countToken['layerCount']), int(countToken['matCount']) + addLayerCount
             ncnnLines[i] = f"{layerCnt} {matCnt}"
         if inputToken:
-            ncnnLines[i] = (nLine + '\n' + splitLine)
+            ncnnLines[i] = f'{inputToken["prefix"]}{int(inputToken["spOutCnt"]) + addLayerCount}{inputToken["suffix"]} ' + " ".join([f"resize_ref_{x}" for x in range(addLayerCount)])
+            haveInputToken = True
+    if haveInputToken ==False:
+        raise "!haveInputToken"
     open(ncnnParams, 'w').write('\n'.join(ncnnLines))
 
 if __name__ == "__main__":
