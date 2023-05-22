@@ -1,6 +1,8 @@
 7767517
-916 1104
+918 1132
 Input                    x                        0 1 x
+Split                    resize_ref_dym_0         1 0 x 
+Split                    resize_ref_dym_0         1 28 x resize_ref_0 resize_ref_1 resize_ref_2 resize_ref_3 resize_ref_4 resize_ref_5 resize_ref_6 resize_ref_7 resize_ref_8 resize_ref_9 resize_ref_10 resize_ref_11 resize_ref_12 resize_ref_13 resize_ref_14 resize_ref_15 resize_ref_16 resize_ref_17 resize_ref_18 resize_ref_19 resize_ref_20 resize_ref_21 resize_ref_22 resize_ref_23 resize_ref_24 resize_ref_25 resize_ref_26 resize_ref_27
 Split                    splitncnn_input0         1 4 x x_splitncnn_0 x_splitncnn_1 x_splitncnn_2 x_splitncnn_3
 Convolution              p2o.Conv.0               1 1 x_splitncnn_3 relu_0.tmp_0 0=64 1=3 3=2 4=-233 5=1 6=1728 9=1
 Split                    splitncnn_0              1 2 relu_0.tmp_0 relu_0.tmp_0_splitncnn_0 relu_0.tmp_0_splitncnn_1
@@ -76,7 +78,7 @@ BinaryOp                 p2o.Add.22               2 1 conv2d_360.tmp_0 relu_29.t
 ReLU                     p2o.Relu.31              1 1 p2o.Add.23 relu_31.tmp_0
 Split                    splitncnn_15             1 2 relu_31.tmp_0 relu_31.tmp_0_splitncnn_0 relu_31.tmp_0_splitncnn_1
 Convolution              p2o.Conv.33              1 1 relu_31.tmp_0_splitncnn_1 conv2d_361.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.0             1 1 conv2d_361.tmp_0 bilinear_interp_v2_0.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.0              2 1 conv2d_361.tmp_0 resize_ref_0 bilinear_interp_v2_0.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.24               2 1 relu_23.tmp_0_splitncnn_1 bilinear_interp_v2_0.tmp_0 p2o.Add.25
 ReLU                     p2o.Relu.32              1 1 p2o.Add.25 relu_32.tmp_0
 Split                    splitncnn_16             1 2 relu_32.tmp_0 relu_32.tmp_0_splitncnn_0 relu_32.tmp_0_splitncnn_1
@@ -147,17 +149,17 @@ BinaryOp                 p2o.Add.50               2 1 conv2d_387.tmp_0 relu_56.t
 ReLU                     p2o.Relu.58              1 1 p2o.Add.51 relu_58.tmp_0
 Split                    splitncnn_30             1 3 relu_58.tmp_0 relu_58.tmp_0_splitncnn_0 relu_58.tmp_0_splitncnn_1 relu_58.tmp_0_splitncnn_2
 Convolution              p2o.Conv.60              1 1 relu_50.tmp_0_splitncnn_2 conv2d_388.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.1             1 1 conv2d_388.tmp_0 bilinear_interp_v2_1.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.1              2 1 conv2d_388.tmp_0 resize_ref_1 bilinear_interp_v2_1.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.52               2 1 relu_42.tmp_0_splitncnn_2 bilinear_interp_v2_1.tmp_0 p2o.Add.53
 Convolution              p2o.Conv.61              1 1 relu_58.tmp_0_splitncnn_2 conv2d_389.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.2             1 1 conv2d_389.tmp_0 bilinear_interp_v2_2.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.2              2 1 conv2d_389.tmp_0 resize_ref_2 bilinear_interp_v2_2.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.54               2 1 p2o.Add.53 bilinear_interp_v2_2.tmp_0 p2o.Add.55
 ReLU                     p2o.Relu.59              1 1 p2o.Add.55 relu_59.tmp_0
 Split                    splitncnn_31             1 2 relu_59.tmp_0 relu_59.tmp_0_splitncnn_0 relu_59.tmp_0_splitncnn_1
 Convolution              p2o.Conv.62              1 1 relu_42.tmp_0_splitncnn_1 conv2d_390.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.56               2 1 relu_50.tmp_0_splitncnn_1 conv2d_390.tmp_0 p2o.Add.57
 Convolution              p2o.Conv.63              1 1 relu_58.tmp_0_splitncnn_1 conv2d_391.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.3             1 1 conv2d_391.tmp_0 bilinear_interp_v2_3.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.3              2 1 conv2d_391.tmp_0 resize_ref_3 bilinear_interp_v2_3.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.58               2 1 p2o.Add.57 bilinear_interp_v2_3.tmp_0 p2o.Add.59
 ReLU                     p2o.Relu.60              1 1 p2o.Add.59 relu_60.tmp_0
 Split                    splitncnn_32             1 2 relu_60.tmp_0 relu_60.tmp_0_splitncnn_0 relu_60.tmp_0_splitncnn_1
@@ -229,17 +231,17 @@ BinaryOp                 p2o.Add.86               2 1 conv2d_418.tmp_0 relu_84.t
 ReLU                     p2o.Relu.86              1 1 p2o.Add.87 relu_86.tmp_0
 Split                    splitncnn_45             1 3 relu_86.tmp_0 relu_86.tmp_0_splitncnn_0 relu_86.tmp_0_splitncnn_1 relu_86.tmp_0_splitncnn_2
 Convolution              p2o.Conv.91              1 1 relu_78.tmp_0_splitncnn_2 conv2d_419.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.4             1 1 conv2d_419.tmp_0 bilinear_interp_v2_4.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.4              2 1 conv2d_419.tmp_0 resize_ref_4 bilinear_interp_v2_4.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.88               2 1 relu_70.tmp_0_splitncnn_2 bilinear_interp_v2_4.tmp_0 p2o.Add.89
 Convolution              p2o.Conv.92              1 1 relu_86.tmp_0_splitncnn_2 conv2d_420.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.5             1 1 conv2d_420.tmp_0 bilinear_interp_v2_5.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.5              2 1 conv2d_420.tmp_0 resize_ref_5 bilinear_interp_v2_5.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.90               2 1 p2o.Add.89 bilinear_interp_v2_5.tmp_0 p2o.Add.91
 ReLU                     p2o.Relu.87              1 1 p2o.Add.91 relu_87.tmp_0
 Split                    splitncnn_46             1 2 relu_87.tmp_0 relu_87.tmp_0_splitncnn_0 relu_87.tmp_0_splitncnn_1
 Convolution              p2o.Conv.93              1 1 relu_70.tmp_0_splitncnn_1 conv2d_421.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.92               2 1 relu_78.tmp_0_splitncnn_1 conv2d_421.tmp_0 p2o.Add.93
 Convolution              p2o.Conv.94              1 1 relu_86.tmp_0_splitncnn_1 conv2d_422.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.6             1 1 conv2d_422.tmp_0 bilinear_interp_v2_6.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.6              2 1 conv2d_422.tmp_0 resize_ref_6 bilinear_interp_v2_6.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.94               2 1 p2o.Add.93 bilinear_interp_v2_6.tmp_0 p2o.Add.95
 ReLU                     p2o.Relu.88              1 1 p2o.Add.95 relu_88.tmp_0
 Split                    splitncnn_47             1 2 relu_88.tmp_0 relu_88.tmp_0_splitncnn_0 relu_88.tmp_0_splitncnn_1
@@ -311,17 +313,17 @@ BinaryOp                 p2o.Add.122              2 1 conv2d_449.tmp_0 relu_112.
 ReLU                     p2o.Relu.114             1 1 p2o.Add.123 relu_114.tmp_0
 Split                    splitncnn_60             1 3 relu_114.tmp_0 relu_114.tmp_0_splitncnn_0 relu_114.tmp_0_splitncnn_1 relu_114.tmp_0_splitncnn_2
 Convolution              p2o.Conv.122             1 1 relu_106.tmp_0_splitncnn_2 conv2d_450.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.7             1 1 conv2d_450.tmp_0 bilinear_interp_v2_7.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.7              2 1 conv2d_450.tmp_0 resize_ref_7 bilinear_interp_v2_7.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.124              2 1 relu_98.tmp_0_splitncnn_2 bilinear_interp_v2_7.tmp_0 p2o.Add.125
 Convolution              p2o.Conv.123             1 1 relu_114.tmp_0_splitncnn_2 conv2d_451.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.8             1 1 conv2d_451.tmp_0 bilinear_interp_v2_8.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.8              2 1 conv2d_451.tmp_0 resize_ref_8 bilinear_interp_v2_8.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.126              2 1 p2o.Add.125 bilinear_interp_v2_8.tmp_0 p2o.Add.127
 ReLU                     p2o.Relu.115             1 1 p2o.Add.127 relu_115.tmp_0
 Split                    splitncnn_61             1 2 relu_115.tmp_0 relu_115.tmp_0_splitncnn_0 relu_115.tmp_0_splitncnn_1
 Convolution              p2o.Conv.124             1 1 relu_98.tmp_0_splitncnn_1 conv2d_452.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.128              2 1 relu_106.tmp_0_splitncnn_1 conv2d_452.tmp_0 p2o.Add.129
 Convolution              p2o.Conv.125             1 1 relu_114.tmp_0_splitncnn_1 conv2d_453.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.9             1 1 conv2d_453.tmp_0 bilinear_interp_v2_9.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.9              2 1 conv2d_453.tmp_0 resize_ref_9 bilinear_interp_v2_9.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.130              2 1 p2o.Add.129 bilinear_interp_v2_9.tmp_0 p2o.Add.131
 ReLU                     p2o.Relu.116             1 1 p2o.Add.131 relu_116.tmp_0
 Split                    splitncnn_62             1 2 relu_116.tmp_0 relu_116.tmp_0_splitncnn_0 relu_116.tmp_0_splitncnn_1
@@ -393,17 +395,17 @@ BinaryOp                 p2o.Add.158              2 1 conv2d_480.tmp_0 relu_140.
 ReLU                     p2o.Relu.142             1 1 p2o.Add.159 relu_142.tmp_0
 Split                    splitncnn_75             1 3 relu_142.tmp_0 relu_142.tmp_0_splitncnn_0 relu_142.tmp_0_splitncnn_1 relu_142.tmp_0_splitncnn_2
 Convolution              p2o.Conv.153             1 1 relu_134.tmp_0_splitncnn_2 conv2d_481.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.10            1 1 conv2d_481.tmp_0 bilinear_interp_v2_10.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.10             2 1 conv2d_481.tmp_0 resize_ref_10 bilinear_interp_v2_10.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.160              2 1 relu_126.tmp_0_splitncnn_2 bilinear_interp_v2_10.tmp_0 p2o.Add.161
 Convolution              p2o.Conv.154             1 1 relu_142.tmp_0_splitncnn_2 conv2d_482.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.11            1 1 conv2d_482.tmp_0 bilinear_interp_v2_11.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.11             2 1 conv2d_482.tmp_0 resize_ref_11 bilinear_interp_v2_11.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.162              2 1 p2o.Add.161 bilinear_interp_v2_11.tmp_0 p2o.Add.163
 ReLU                     p2o.Relu.143             1 1 p2o.Add.163 relu_143.tmp_0
 Split                    splitncnn_76             1 2 relu_143.tmp_0 relu_143.tmp_0_splitncnn_0 relu_143.tmp_0_splitncnn_1
 Convolution              p2o.Conv.155             1 1 relu_126.tmp_0_splitncnn_1 conv2d_483.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.164              2 1 relu_134.tmp_0_splitncnn_1 conv2d_483.tmp_0 p2o.Add.165
 Convolution              p2o.Conv.156             1 1 relu_142.tmp_0_splitncnn_1 conv2d_484.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.12            1 1 conv2d_484.tmp_0 bilinear_interp_v2_12.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.12             2 1 conv2d_484.tmp_0 resize_ref_12 bilinear_interp_v2_12.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.166              2 1 p2o.Add.165 bilinear_interp_v2_12.tmp_0 p2o.Add.167
 ReLU                     p2o.Relu.144             1 1 p2o.Add.167 relu_144.tmp_0
 Split                    splitncnn_77             1 2 relu_144.tmp_0 relu_144.tmp_0_splitncnn_0 relu_144.tmp_0_splitncnn_1
@@ -497,23 +499,23 @@ BinaryOp                 p2o.Add.202              2 1 conv2d_520.tmp_0 relu_177.
 ReLU                     p2o.Relu.179             1 1 p2o.Add.203 relu_179.tmp_0
 Split                    splitncnn_95             1 4 relu_179.tmp_0 relu_179.tmp_0_splitncnn_0 relu_179.tmp_0_splitncnn_1 relu_179.tmp_0_splitncnn_2 relu_179.tmp_0_splitncnn_3
 Convolution              p2o.Conv.193             1 1 relu_163.tmp_0_splitncnn_3 conv2d_521.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.13            1 1 conv2d_521.tmp_0 bilinear_interp_v2_13.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.13             2 1 conv2d_521.tmp_0 resize_ref_13 bilinear_interp_v2_13.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.204              2 1 relu_155.tmp_0_splitncnn_3 bilinear_interp_v2_13.tmp_0 p2o.Add.205
 Convolution              p2o.Conv.194             1 1 relu_171.tmp_0_splitncnn_3 conv2d_522.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.14            1 1 conv2d_522.tmp_0 bilinear_interp_v2_14.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.14             2 1 conv2d_522.tmp_0 resize_ref_14 bilinear_interp_v2_14.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.206              2 1 p2o.Add.205 bilinear_interp_v2_14.tmp_0 p2o.Add.207
 Convolution              p2o.Conv.195             1 1 relu_179.tmp_0_splitncnn_3 conv2d_523.tmp_0 0=18 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.15            1 1 conv2d_523.tmp_0 bilinear_interp_v2_15.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.15             2 1 conv2d_523.tmp_0 resize_ref_15 bilinear_interp_v2_15.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.208              2 1 p2o.Add.207 bilinear_interp_v2_15.tmp_0 p2o.Add.209
 ReLU                     p2o.Relu.180             1 1 p2o.Add.209 relu_180.tmp_0
 Split                    splitncnn_96             1 2 relu_180.tmp_0 relu_180.tmp_0_splitncnn_0 relu_180.tmp_0_splitncnn_1
 Convolution              p2o.Conv.196             1 1 relu_155.tmp_0_splitncnn_2 conv2d_524.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.210              2 1 relu_163.tmp_0_splitncnn_2 conv2d_524.tmp_0 p2o.Add.211
 Convolution              p2o.Conv.197             1 1 relu_171.tmp_0_splitncnn_2 conv2d_525.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.16            1 1 conv2d_525.tmp_0 bilinear_interp_v2_16.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.16             2 1 conv2d_525.tmp_0 resize_ref_16 bilinear_interp_v2_16.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.212              2 1 p2o.Add.211 bilinear_interp_v2_16.tmp_0 p2o.Add.213
 Convolution              p2o.Conv.198             1 1 relu_179.tmp_0_splitncnn_2 conv2d_526.tmp_0 0=36 1=1 4=-233 5=1 6=5184
-Interp                   p2o.Resize.17            1 1 conv2d_526.tmp_0 bilinear_interp_v2_17.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.17             2 1 conv2d_526.tmp_0 resize_ref_17 bilinear_interp_v2_17.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.214              2 1 p2o.Add.213 bilinear_interp_v2_17.tmp_0 p2o.Add.215
 ReLU                     p2o.Relu.181             1 1 p2o.Add.215 relu_181.tmp_0
 Split                    splitncnn_97             1 2 relu_181.tmp_0 relu_181.tmp_0_splitncnn_0 relu_181.tmp_0_splitncnn_1
@@ -523,7 +525,7 @@ BinaryOp                 p2o.Add.216              2 1 relu_171.tmp_0_splitncnn_1
 Convolution              p2o.Conv.201             1 1 relu_163.tmp_0_splitncnn_1 conv2d_529.tmp_0 0=72 1=3 3=2 4=-233 5=1 6=23328
 BinaryOp                 p2o.Add.218              2 1 p2o.Add.217 conv2d_529.tmp_0 p2o.Add.219
 Convolution              p2o.Conv.202             1 1 relu_179.tmp_0_splitncnn_1 conv2d_530.tmp_0 0=72 1=1 4=-233 5=1 6=10368
-Interp                   p2o.Resize.18            1 1 conv2d_530.tmp_0 bilinear_interp_v2_18.tmp_0 0=2 3=44 4=44
+Interp                   p2o.Resize.18             2 1 conv2d_530.tmp_0 resize_ref_18 bilinear_interp_v2_18.tmp_0 0=2  1=0.0625 2=0.0625 
 BinaryOp                 p2o.Add.220              2 1 p2o.Add.219 bilinear_interp_v2_18.tmp_0 p2o.Add.221
 ReLU                     p2o.Relu.183             1 1 p2o.Add.221 relu_183.tmp_0
 Split                    splitncnn_98             1 2 relu_183.tmp_0 relu_183.tmp_0_splitncnn_0 relu_183.tmp_0_splitncnn_1
@@ -619,23 +621,23 @@ BinaryOp                 p2o.Add.258              2 1 conv2d_568.tmp_0 relu_217.
 ReLU                     p2o.Relu.219             1 1 p2o.Add.259 relu_219.tmp_0
 Split                    splitncnn_115            1 4 relu_219.tmp_0 relu_219.tmp_0_splitncnn_0 relu_219.tmp_0_splitncnn_1 relu_219.tmp_0_splitncnn_2 relu_219.tmp_0_splitncnn_3
 Convolution              p2o.Conv.241             1 1 relu_203.tmp_0_splitncnn_3 conv2d_569.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.19            1 1 conv2d_569.tmp_0 bilinear_interp_v2_19.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.19             2 1 conv2d_569.tmp_0 resize_ref_19 bilinear_interp_v2_19.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.260              2 1 relu_195.tmp_0_splitncnn_3 bilinear_interp_v2_19.tmp_0 p2o.Add.261
 Convolution              p2o.Conv.242             1 1 relu_211.tmp_0_splitncnn_3 conv2d_570.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.20            1 1 conv2d_570.tmp_0 bilinear_interp_v2_20.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.20             2 1 conv2d_570.tmp_0 resize_ref_20 bilinear_interp_v2_20.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.262              2 1 p2o.Add.261 bilinear_interp_v2_20.tmp_0 p2o.Add.263
 Convolution              p2o.Conv.243             1 1 relu_219.tmp_0_splitncnn_3 conv2d_571.tmp_0 0=18 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.21            1 1 conv2d_571.tmp_0 bilinear_interp_v2_21.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.21             2 1 conv2d_571.tmp_0 resize_ref_21 bilinear_interp_v2_21.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.264              2 1 p2o.Add.263 bilinear_interp_v2_21.tmp_0 p2o.Add.265
 ReLU                     p2o.Relu.220             1 1 p2o.Add.265 relu_220.tmp_0
 Split                    splitncnn_116            1 2 relu_220.tmp_0 relu_220.tmp_0_splitncnn_0 relu_220.tmp_0_splitncnn_1
 Convolution              p2o.Conv.244             1 1 relu_195.tmp_0_splitncnn_2 conv2d_572.tmp_0 0=36 1=3 3=2 4=-233 5=1 6=5832
 BinaryOp                 p2o.Add.266              2 1 relu_203.tmp_0_splitncnn_2 conv2d_572.tmp_0 p2o.Add.267
 Convolution              p2o.Conv.245             1 1 relu_211.tmp_0_splitncnn_2 conv2d_573.tmp_0 0=36 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.22            1 1 conv2d_573.tmp_0 bilinear_interp_v2_22.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.22             2 1 conv2d_573.tmp_0 resize_ref_22 bilinear_interp_v2_22.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.268              2 1 p2o.Add.267 bilinear_interp_v2_22.tmp_0 p2o.Add.269
 Convolution              p2o.Conv.246             1 1 relu_219.tmp_0_splitncnn_2 conv2d_574.tmp_0 0=36 1=1 4=-233 5=1 6=5184
-Interp                   p2o.Resize.23            1 1 conv2d_574.tmp_0 bilinear_interp_v2_23.tmp_0 0=2 3=88 4=88
+Interp                   p2o.Resize.23             2 1 conv2d_574.tmp_0 resize_ref_23 bilinear_interp_v2_23.tmp_0 0=2  1=0.125 2=0.125 
 BinaryOp                 p2o.Add.270              2 1 p2o.Add.269 bilinear_interp_v2_23.tmp_0 p2o.Add.271
 ReLU                     p2o.Relu.221             1 1 p2o.Add.271 relu_221.tmp_0
 Split                    splitncnn_117            1 2 relu_221.tmp_0 relu_221.tmp_0_splitncnn_0 relu_221.tmp_0_splitncnn_1
@@ -645,7 +647,7 @@ BinaryOp                 p2o.Add.272              2 1 relu_211.tmp_0_splitncnn_1
 Convolution              p2o.Conv.249             1 1 relu_203.tmp_0_splitncnn_1 conv2d_577.tmp_0 0=72 1=3 3=2 4=-233 5=1 6=23328
 BinaryOp                 p2o.Add.274              2 1 p2o.Add.273 conv2d_577.tmp_0 p2o.Add.275
 Convolution              p2o.Conv.250             1 1 relu_219.tmp_0_splitncnn_1 conv2d_578.tmp_0 0=72 1=1 4=-233 5=1 6=10368
-Interp                   p2o.Resize.24            1 1 conv2d_578.tmp_0 bilinear_interp_v2_24.tmp_0 0=2 3=44 4=44
+Interp                   p2o.Resize.24             2 1 conv2d_578.tmp_0 resize_ref_24 bilinear_interp_v2_24.tmp_0 0=2  1=0.0625 2=0.0625 
 BinaryOp                 p2o.Add.276              2 1 p2o.Add.275 bilinear_interp_v2_24.tmp_0 p2o.Add.277
 ReLU                     p2o.Relu.223             1 1 p2o.Add.277 relu_223.tmp_0
 Split                    splitncnn_118            1 2 relu_223.tmp_0 relu_223.tmp_0_splitncnn_0 relu_223.tmp_0_splitncnn_1
@@ -741,13 +743,13 @@ BinaryOp                 p2o.Add.314              2 1 conv2d_616.tmp_0 relu_257.
 ReLU                     p2o.Relu.259             1 1 p2o.Add.315 relu_259.tmp_0
 Split                    splitncnn_135            1 2 relu_259.tmp_0 relu_259.tmp_0_splitncnn_0 relu_259.tmp_0_splitncnn_1
 Convolution              p2o.Conv.289             1 1 relu_243.tmp_0_splitncnn_1 conv2d_617.tmp_0 0=18 1=1 4=-233 5=1 6=648
-Interp                   p2o.Resize.25            1 1 conv2d_617.tmp_0 bilinear_interp_v2_25.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.25             2 1 conv2d_617.tmp_0 resize_ref_25 bilinear_interp_v2_25.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.316              2 1 relu_235.tmp_0_splitncnn_1 bilinear_interp_v2_25.tmp_0 p2o.Add.317
 Convolution              p2o.Conv.290             1 1 relu_251.tmp_0_splitncnn_1 conv2d_618.tmp_0 0=18 1=1 4=-233 5=1 6=1296
-Interp                   p2o.Resize.26            1 1 conv2d_618.tmp_0 bilinear_interp_v2_26.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.26             2 1 conv2d_618.tmp_0 resize_ref_26 bilinear_interp_v2_26.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.318              2 1 p2o.Add.317 bilinear_interp_v2_26.tmp_0 p2o.Add.319
 Convolution              p2o.Conv.291             1 1 relu_259.tmp_0_splitncnn_1 conv2d_619.tmp_0 0=18 1=1 4=-233 5=1 6=2592
-Interp                   p2o.Resize.27            1 1 conv2d_619.tmp_0 bilinear_interp_v2_27.tmp_0 0=2 3=176 4=176
+Interp                   p2o.Resize.27             2 1 conv2d_619.tmp_0 resize_ref_27 bilinear_interp_v2_27.tmp_0 0=2  1=0.25 2=0.25 
 BinaryOp                 p2o.Add.320              2 1 p2o.Add.319 bilinear_interp_v2_27.tmp_0 p2o.Add.321
 ReLU                     p2o.Relu.260             1 1 p2o.Add.321 relu_260.tmp_0
 Convolution              p2o.Conv.292             1 1 relu_235.tmp_0_splitncnn_0 relu_264.tmp_0 0=18 1=3 3=2 4=-233 5=1 6=2916 9=1

@@ -156,6 +156,7 @@ def predict(model,
             data = preprocess(img=im_path, transforms=transforms, trimap=trimap)
             if add_opt == "SaveOnnx":
             # x_spec = paddle.static.InputSpec([1, 3, None, None], 'float32', 'x') # 指定动态尺寸
+                print("input shape", data["img"].shape)
                 x_spec = paddle.static.InputSpec(data["img"].shape, 'float32', 'x')
                 paddle.onnx.export(model, model_path_no_suffix, input_spec=[x_spec], opset_version=11)
                 print(f"ONNX save to ${model_path_no_suffix}.onnx, exit.")
