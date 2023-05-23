@@ -4,6 +4,8 @@ def ReplaceInterpToDynamic(ncnnParams:str, srcSize:tuple, inputName = 'x'):
     ncnnLines = open(ncnnParams, 'r').read().split('\n')
     addLayerCount = 0
     for i, nLine in enumerate(ncnnLines):
+        nLine = nLine.replace(" 3=0 4=0", "")
+        nLine = nLine.replace(" 1=1.000000e+00 2=1.000000e+00", "")
         interpToken = re.match(r"(?P<prefix>Interp\s+\S+\s+)(?P<inMatCnt>\d)\s+(?P<outMatCnt>\d)\s+(?P<inMat>\S+)\s+(?P<outMat>\S+)\s+(?P<paramsPrefix>.*?)3=(?P<height>\d+)\s+4=(?P<width>\d+)(?P<paramsSufffix>.*)", nLine)
         if interpToken:
             height = int(interpToken["height"])
@@ -32,5 +34,5 @@ if __name__ == "__main__":
     import os
     import re
     nowPath = os.path.dirname(__file__)
-    filePath = os.path.join(nowPath, "modnet.param")
-    ReplaceInterpToDynamic(filePath, (704, 704))
+    filePath = os.path.join(nowPath, "modnet-sim.param")
+    ReplaceInterpToDynamic(filePath, (144*4, 216*4))
